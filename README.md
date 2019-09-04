@@ -48,6 +48,8 @@ cd maven
 mvn -DdistributionTargetDir="{maven-distrib-location}/apache-maven-head" clean package
 ``` 
 
+Heap size is fixed with the help of [@HeapSize](https://github.com/quick-perf/doc/wiki/JVM-annotations#heapsize).
+
 # Benchmark heap allocation of several Maven releases
 
 `MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
@@ -79,13 +81,13 @@ For this graph, you can consult:
 * [the measures](measures/maven-memory-allocation-2019-09-01-18-48-41.csv)
 * [the execution context](measures/execution-context-2019-09-01-18-48-41.txt)
 
-Measures took 1 hour and 12 minutes. From Maven versions 3.2.5 to 3.6.2, heap allocation level is the highest with Maven 3.2.5 and the smallest with Maven 3.6.2. And __the heap allocation decreases from ~7 GB with Maven 3.6.1 to ~3 GB with Maven 3.6.2__.
+Measures took around one hour and a quarter. 
 
-JVM heap size can be fixed with the help of [@HeapSize](https://github.com/quick-perf/doc/wiki/JVM-annotations#heapsize):
-* with Maven 3.2.5 and a JVM heap size between 6 and 9 GB, one measure of heap allocation takes around one minute: the test duration is about 1.5 minute with a 5 GB heap size, probably due to more garbage collection,
-* __with Maven 3.6.2, the test duration drops to 15 seconds for a heap size between 1 and 9 GB__
+From Maven versions 3.2.5 to 3.6.2, heap allocation level is the highest with Maven 3.2.5 and the smallest with Maven 3.6.2. *The heap allocation decreases from ~7 GB with Maven 3.6.1 to ~3 GB with Maven 3.6.2*.
 
-Less heap allocation means you can allocate less memory, and given a memory allocation you get less garbage collection, then it takes less time: with QuickPerf, we were able to measure the improvement precisely.
+Control and reduce heap allocation is an important matter for Maven project. Indeed, a part of the heap allocation is going to be garbage collected and the garbage collection activity is succeptible to slow down your build. In addition, less heap allocation means that you may execute Maven with a smaller heap size.
+
+But where the allocation comes from? In the following part we will see how to spot the Java methods allocating a lot.
 
 # Investigate where heap allocation comes from
 
@@ -106,7 +108,7 @@ The recording file can be found here: C:\Users\JEANBI~1\AppData\Local\Temp\Quick
 You can open it with Java Mission Control (JMC).
 ```
 
-You can open it with Java Mission Control (JMC). 
+You can open it with Java Mission Control (JMC) to discover the methods contributing the most to heap allocation. 
 
 Below a JFR file for Maven 3.2.5 and opened with JMC 5.5:
 <p align="center">
