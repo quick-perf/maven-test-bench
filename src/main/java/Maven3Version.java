@@ -60,6 +60,10 @@ public enum Maven3Version {
         URL url = new URL(urlAsString);
         ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
         String mavenZipFilePath = findMavenZipFilePath();
+        File mavenDownloadDir = new File(BenchProperties.INSTANCE.getMavenBinariesPath());
+        if(!mavenDownloadDir.exists()) {
+            mavenDownloadDir.mkdir();
+        }
         FileOutputStream fileOutputStream = new FileOutputStream(mavenZipFilePath);
         FileChannel fileChannel = fileOutputStream.getChannel();
         fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
