@@ -6,10 +6,11 @@
 
 <p align="center">
   <a href="#General-setup">General setup</a> •
-  <a href="#Benchmark-heap-allocation-of-several-Maven-releases">Benchmark heap allocation of several Maven releases</a>
+  <a href="#Benchmark-heap-allocation-of-several-Maven-releases">Benchmark heap allocation of several Maven releases</a> 
 </p>
 <p align="center">
-  <a href="#Investigate-where-heap-allocation-comes-from">Investigate where heap allocation comes from</a> •
+<a href="#Investigate-where-heap-allocation-comes-from">Investigate where heap allocation comes from</a>  •
+  <a href="#Conclusion-and-perspectives">Conclusion and perspectives</a> •
   <a href="#Acknowledgments">Acknowledgments</a> •
   <a href="#License">License</a> 
 </p>
@@ -83,7 +84,7 @@ For this graph, you can consult:
 
 Measures took around one hour and a quarter. 
 
-From Maven versions 3.2.5 to 3.6.2, heap allocation level is the highest with Maven 3.2.5 and the smallest with Maven 3.6.2. *The heap allocation decreases from ~7 GB with Maven 3.6.1 to ~3 GB with Maven 3.6.2*.
+From Maven versions 3.2.5 to 3.6.2, heap allocation level is the highest with Maven 3.2.5 and the smallest with Maven 3.6.2. *The heap allocation decreases from ~7 Gb with Maven 3.6.1 to ~3 Gb with Maven 3.6.2*.
 
 Control and reduce heap allocation is an important matter for Maven project. Indeed, a part of the heap allocation is going to be garbage collected and the garbage collection activity is succeptible to slow down your build. In addition, less heap allocation means that you may execute Maven with a smaller heap size.
 
@@ -125,6 +126,14 @@ Score: 97
 Message: The program generated 20 482 exceptions per second during 26,722 s starting at 
 03/09/19 17:08:31.
 ```
+
+# Conclusion and perspectives
+We have developed a test bench that is able to compare the heap allocation level between several Maven versions. We also have given a method to understand the origin of heap allocation.
+
+Feel free to play with this bench and [QuickPerf](https://github.com/quick-perf/doc/wiki/QuickPerf), to perform measures (heap allocation, execution time, ...) with different plugins/goals, use different JDK or garbage collectors, ..., suggest new ideas, create new features or share your measures with PR!
+Some issues are also available [here](https://github.com/quick-perf/maven-test-bench/issues)!
+
+You also have [QuickPerf issues](https://github.com/quick-perf/quickperf/issues) to build new performance tools!
 
 # Acknowledgments
 Many thanks to Hervé Boutemy for his help and support to start this project.
