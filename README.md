@@ -15,11 +15,9 @@
   <a href="#License">License</a> 
 </p>
 
-At this moment, this project allows to benchmark and investigate the origin of heap allocation caused by `mvn validate` (the first phase before lanching any plugin: see [Lifecycles Reference](https://maven.apache.org/ref/current/maven-core/lifecycles.html)).
+At this moment, this project is a test bench based on [QuickPerf](https://github.com/quick-perf/quickperf) to benchmark and understand heap allocation caused by mvn validate (the first phase before lanching any plugin: see Lifecycles Reference).
 
-This project uses [QuickPerf](https://github.com/quick-perf/quickperf) to measure and investigate the heap allocation level.
-
-Measures have been done executing `mvn validate` on Apache Camel source code. 
+Measures have been done with Apache Camel source code as a target project to execute Maven.
 
 Feel free to use this project and contribute to it!
 
