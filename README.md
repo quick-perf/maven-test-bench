@@ -15,7 +15,7 @@
   <a href="#License">License</a> 
 </p>
 
-At this moment, this project is a test bench based on [QuickPerf](https://github.com/quick-perf/quickperf) to benchmark and understand heap allocation caused by mvn validate (the first phase before lanching any plugin: see Lifecycles Reference).
+At this moment, this project is a test bench based on [QuickPerf](https://github.com/quick-perf/quickperf) to benchmark and understand heap allocation caused by `mvn validate` (the first phase before launching any plugin: see [Lifecycles Reference](https://maven.apache.org/ref/current/maven-core/lifecycles.html)).
 
 Measures have been done with Apache Camel source code as a target project to execute Maven.
 
