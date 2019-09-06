@@ -10,7 +10,7 @@
 </p>
 <p align="center">
 <a href="#Investigate-where-heap-allocation-comes-from">Investigate where heap allocation comes from</a>  •
-  <a href="#Conclusion-and-perspectives">Conclusion and perspectives</a> •
+  <a href="#perspectives">Perspectives</a> •
   <a href="#Acknowledgments">Acknowledgments</a> •
   <a href="#License">License</a> 
 </p>
@@ -127,7 +127,7 @@ Message: The program generated 20 482 exceptions per second during 26,722 s star
 03/09/19 17:08:31.
 ```
 
-# Conclusion and perspectives
+# Perspectives
 We have developed a test bench that is able to compare the heap allocation level between several Maven versions. We also have given a method to understand the origin of heap allocation.
 
 Feel free to play with this bench and [QuickPerf](https://github.com/quick-perf/doc/wiki/QuickPerf), to perform measures (heap allocation, execution time, ...) with different plugins/goals, use different JDK or garbage collectors, ..., suggest new ideas, create new features or share your measures with PR!
