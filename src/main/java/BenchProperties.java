@@ -1,10 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class BenchProperties {
 
@@ -29,36 +26,23 @@ public class BenchProperties {
     private List<Maven3Version> maven3VersionsToMeasure;
 
     private void initializeProperties() {
-        try {
-            Properties properties = loadProperties();
+        // Properties properties = loadProperties();
+        BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver(fileName);
 
-            String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
-            this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
+        String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
+        this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
 
-            String numberOfWarnsAsString = properties.getProperty("warmup.number");
-            this.numberOfWarns = Integer.parseInt(numberOfWarnsAsString);
+        String numberOfWarnsAsString = properties.getProperty("warmup.number");
+        this.numberOfWarns = Integer.parseInt(numberOfWarnsAsString);
 
-            this.mavenBinariesPath = properties.getProperty("maven.binaries.path");
+        this.mavenBinariesPath = properties.getProperty("maven.binaries.path");
 
-            this.projectUnderTest = properties.getProperty("project-under-test.path");
+        this.projectUnderTest = properties.getProperty("project-under-test.path");
 
-            this.exportPathOfMeasures = properties.getProperty("measures.export.path");
+        this.exportPathOfMeasures = properties.getProperty("measures.export.path");
 
-            this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
+        this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
 
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to load bench properties.", e);
-        }
-
-    }
-
-    private Properties loadProperties() throws IOException {
-        Properties properties = new Properties();
-        String propertiesFilePath = findSrcTestResourcePath() + File.separator + fileName;
-        FileInputStream fileInputStream = new FileInputStream(propertiesFilePath);
-        properties.load(fileInputStream);
-        fileInputStream.close();
-        return properties;
     }
 
     private static String findSrcTestResourcePath() {
@@ -66,7 +50,7 @@ public class BenchProperties {
         return file.getAbsolutePath();
     }
 
-    private List<Maven3Version> findMaven3VersionsToMeasure(Properties properties) {
+    private List<Maven3Version> findMaven3VersionsToMeasure(BenchPropertiesResolver properties) {
 
         List<Maven3Version> maven3VersionsToMeasure = new ArrayList<>();
 
@@ -93,11 +77,11 @@ public class BenchProperties {
 
     }
 
-    private boolean isMaven3VersionFrom(Maven3Version maven3Version, Properties properties) {
+    private boolean isMaven3VersionFrom(Maven3Version maven3Version, BenchPropertiesResolver properties) {
         return properties.getProperty("maven.version.from").equals(maven3Version.getNumVersion());
     }
 
-    private boolean isMaven3VersionTo(Maven3Version maven3Version, Properties properties) {
+    private boolean isMaven3VersionTo(Maven3Version maven3Version, BenchPropertiesResolver properties) {
         return properties.getProperty("maven.version.to").equals(maven3Version.getNumVersion());
     }
 
@@ -125,4 +109,51 @@ public class BenchProperties {
         return maven3VersionsToMeasure;
     }
 
+    @FunctionalInterface
+    private interface BenchPropertiesResolver {
+        String getProperty(String key);
+    }
+
+    private static class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
+
+        private final List<BenchPropertiesResolver> resolvers = new ArrayList<>();
+
+        private DefaultBenchPropertiesResolver(String fileName) {
+            resolvers.add(key -> System.getenv(key));
+            resolvers.add(key -> System.getProperty(key));
+            resolvers.add(new BenchPropertiesFileBasedResolver(fileName));
+        }
+
+        @Override
+        public String getProperty(String key) {
+            return resolvers.stream()
+                .map(benchPropertiesResolver -> benchPropertiesResolver.getProperty(key))
+                .filter(Objects::nonNull)
+                .findFirst().orElse(null);
+        }
+    }
+
+    private static class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
+        private Properties props;
+
+        private BenchPropertiesFileBasedResolver(String fileName) {
+            this.props = this.loadProperties(fileName);
+        }
+
+        private Properties loadProperties(String fileName) {
+            Properties properties = new Properties();
+            String propertiesFilePath = findSrcTestResourcePath() + File.separator + fileName;
+            try (final FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
+                properties.load(fileInputStream);
+            } catch (IOException fileNotFoundEx) {
+                throw new IllegalStateException("Unable to load bench properties.", fileNotFoundEx);
+            }
+            return properties;
+        }
+
+        @Override
+        public String getProperty(String key) {
+            return props.getProperty(key);
+        }
+    }
 }
