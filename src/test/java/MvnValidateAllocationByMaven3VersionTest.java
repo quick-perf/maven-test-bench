@@ -35,7 +35,11 @@ public class MvnValidateAllocationByMaven3VersionTest {
         public static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
-        private final String pathOfMavenProjectUnderTest = BenchProperties.INSTANCE.getPathOfProjectUnderTest();
+        // private final String pathOfMavenProjectUnderTest = ;
+        private final ProjectUnderTest projectUnderTest = new ProjectUnderTest(
+                BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
+                "https://github.com/apache/camel/archive/camel-2.23.4.zip"
+        );
 
         private Verifier verifier;
 
@@ -51,6 +55,8 @@ public class MvnValidateAllocationByMaven3VersionTest {
             System.setProperty("verifier.forkMode", "auto"); // embedded
 
             System.setProperty("maven.home", mavenPath);
+
+            projectUnderTest.downloadProject();
 
             verifier = new Verifier(pathOfMavenProjectUnderTest);
             verifier.setSystemProperty("maven.multiModuleProjectDirectory", pathOfMavenProjectUnderTest);
