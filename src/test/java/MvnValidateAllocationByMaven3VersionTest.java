@@ -90,7 +90,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
             applyWarmMeasurements(maven3Version, testClass);
 
-            long[] allocations = measureAllocationSeveralTimes(testClass, numberOfMeasuresByVersion);
+            AllocationTimePair[] allocations = measureAllocationSeveralTimes(testClass, numberOfMeasuresByVersion);
 
             AllocationCsvExporter.INSTANCE.writeAllocationsToCsv(maven3Version
                                                                , allocations
@@ -134,25 +134,28 @@ public class MvnValidateAllocationByMaven3VersionTest {
         return df.format(new Date());
     }
 
-    private long[] measureAllocationSeveralTimes(Class<?> testClass, int numberOfTimes) throws IOException {
-        long[] allocations = new long[numberOfTimes];
+    private AllocationTimePair[] measureAllocationSeveralTimes(Class<?> testClass, int numberOfTimes) throws IOException {
+    	AllocationTimePair[] allocations = new AllocationTimePair[numberOfTimes];
         for (int i = 0; i < numberOfTimes; i++) {
-            long allocationInBytes = measureAllocation(testClass);
-            allocations[i] = allocationInBytes;
+        	allocations[i] =measureAllocation(testClass);
         }
         return allocations;
     }
 
-    private Long measureAllocation(Class<?> testClass) throws IOException {
+    private AllocationTimePair measureAllocation(Class<?> testClass) throws IOException {
         deleteQuickPerfFoldersInTemp();
+        long startTime = System.currentTimeMillis();
         PrintableResult printableResult = testResult(testClass);
+        long executionTimeInMilliseconds = System.currentTimeMillis() - startTime;
         if(printableResult.failureCount() != 0) {
             System.out.println("Allocation can't be measured. " + printableResult.toString());
         }
         Long allocationInBytes = retrieveMeasuredAllocationInBytes();
+        Long lenghtInSeconds = executionTimeInMilliseconds/1000l;
         System.out.println("Allocation in bytes: " + allocationInBytes);
+        System.out.println("Lenght in seconds: " + lenghtInSeconds);
         System.out.println("----------------");
-        return allocationInBytes;
+        return new AllocationTimePair(allocationInBytes, lenghtInSeconds);
     }
 
     private void deleteQuickPerfFoldersInTemp() throws IOException {
