@@ -47,6 +47,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
         @Before
         public void before() throws VerificationException {
+            String pathOfMavenProjectUnderTest = null;
 
             System.out.println(MAVEN_3_VERSION);
 
@@ -56,7 +57,11 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
             System.setProperty("maven.home", mavenPath);
 
-            projectUnderTest.downloadProject();
+            try {
+                pathOfMavenProjectUnderTest = projectUnderTest.installProject();
+            } catch (IOException mavenProjectUnderTestNotInstallEx) {
+                throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
+            }
 
             verifier = new Verifier(pathOfMavenProjectUnderTest);
             verifier.setSystemProperty("maven.multiModuleProjectDirectory", pathOfMavenProjectUnderTest);
