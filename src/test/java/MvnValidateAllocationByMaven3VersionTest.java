@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -47,8 +50,6 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
         @Before
         public void before() throws VerificationException {
-            String pathOfMavenProjectUnderTest = null;
-
             System.out.println(MAVEN_3_VERSION);
 
             String mavenPath = MAVEN_3_VERSION.getMavenPath();
@@ -57,14 +58,17 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
             System.setProperty("maven.home", mavenPath);
 
-            try {
-                pathOfMavenProjectUnderTest = projectUnderTest.installProject();
-            } catch (IOException mavenProjectUnderTestNotInstallEx) {
-                throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
+            if (projectUnderTest.isNotAlreadyInstalled()) {
+                try {
+                    projectUnderTest.installProject();
+                } catch (IOException mavenProjectUnderTestNotInstallEx) {
+                    throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
+                }
             }
 
-            verifier = new Verifier(pathOfMavenProjectUnderTest);
-            verifier.setSystemProperty("maven.multiModuleProjectDirectory", pathOfMavenProjectUnderTest);
+            final String projectDirectoryPath = projectUnderTest.getPath();
+            verifier = new Verifier(projectDirectoryPath);
+            verifier.setSystemProperty("maven.multiModuleProjectDirectory", projectDirectoryPath);
         }
 
         @HeapSize(value = 6, unit = AllocationUnit.GIGA_BYTE)
@@ -138,10 +142,14 @@ public class MvnValidateAllocationByMaven3VersionTest {
         }
     }
 
-    private String buildAllocationCsvExportPath(String dateTimeAsString) {
-        String measurementsExportPath = BenchProperties.INSTANCE.getExportPathOfMeasures();
+    private String buildAllocationCsvExportPath(String dateTimeAsString) throws IOException {
+        String measurementsExportPathName = BenchProperties.INSTANCE.getExportPathOfMeasures();
+        final Path measurementsExportPath = Paths.get(measurementsExportPathName);
+        if (Files.notExists(measurementsExportPath)) {
+            Files.createDirectory(measurementsExportPath);
+        }
         String fileName = "maven-memory-allocation" + "-" + dateTimeAsString + ".csv";
-        return measurementsExportPath + File.separator + fileName;
+        return measurementsExportPathName + File.separator + fileName;
     }
 
     private String getDateTimeAsString() {
