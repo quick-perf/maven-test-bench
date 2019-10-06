@@ -38,23 +38,26 @@ public class AllocationCsvExporter {
     }
 
     private String[] buildCsvHeaders(int numberOfAllocations) {
-        String[] csvHeaders = new String[(3 * numberOfAllocations) +5];
+        String[] csvHeaders = new String[(3 * numberOfAllocations) +8];
         csvHeaders[0] = "Maven version";
         csvHeaders[1] = "Average (bytes)";
         csvHeaders[2] = "Average (Gb)";
         csvHeaders[3] = "Min (bytes)";
         csvHeaders[4] = "Max (bytes)";
+        csvHeaders[5] = "Average length(seconds)";
+        csvHeaders[6] = "Min length (seconds)";
+        csvHeaders[7] = "Max length (seconds)";
 
         for (int i = 1; i < numberOfAllocations + 1; i++) {
-            csvHeaders[i + 4] = "Allocation" + " " + i + " "+ "(bytes)";
+            csvHeaders[i + 7] = "Allocation" + " " + i + " "+ "(bytes)";
         }
         
         for (int i = 1; i < numberOfAllocations + 1; i++) {
-        	csvHeaders[i + 4+ numberOfAllocations] = "Lenght" + " " + i + " "+ "(seconds)";
+        	csvHeaders[i + 7+ numberOfAllocations] = "Lenght" + " " + i + " "+ "(seconds)";
         }
 
         for (int i = 1; i < numberOfAllocations + 1; i++) {
-            csvHeaders[i + 4 + numberOfAllocations*2] = "Allocation" + " " + i + " "+ "(Gb)";
+            csvHeaders[i + 7 + numberOfAllocations*2] = "Allocation" + " " + i + " "+ "(Gb)";
         }
         return csvHeaders;
     }
@@ -72,6 +75,12 @@ public class AllocationCsvExporter {
         csvRecord.add(allocationStatistics.getMin());
         csvRecord.add(allocationStatistics.getMax());
 
+        LongSummaryStatistics lengthStatistics = Arrays.stream(input).collect(Collectors.summarizingLong(AllocationTimePair::getLenghtInSeconds));
+        double averageAllocationInSeconds = lengthStatistics.getAverage();
+        csvRecord.add(averageAllocationInSeconds);
+        csvRecord.add(lengthStatistics.getMin());
+        csvRecord.add(lengthStatistics.getMax());
+        
         for (int i = 0; i < input.length; i++) {
             csvRecord.add(input[i].getAllocationInBytes());
         }
@@ -83,6 +92,8 @@ public class AllocationCsvExporter {
         for (int i = 0; i < input.length; i++) {
             csvRecord.add(input[i].getAllocationInBytes() / Math.pow(1024, 3));
         }
+        
+        
 
         return csvRecord;
     }
