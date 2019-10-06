@@ -121,6 +121,7 @@ public class BenchProperties {
         private DefaultBenchPropertiesResolver(String fileName) {
             resolvers.add(key -> System.getenv(key));
             resolvers.add(key -> System.getProperty(key));
+            resolvers.add(new BenchPropertiesFileBasedResolver("local." + fileName));
             resolvers.add(new BenchPropertiesFileBasedResolver(fileName));
         }
 

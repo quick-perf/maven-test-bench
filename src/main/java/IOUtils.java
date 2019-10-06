@@ -19,7 +19,7 @@ public class IOUtils {
             throw new IllegalArgumentException("source url is not well formatted.", malformedUrlEx);
         }
 
-        String fileName = url.getFile().substring(url.getFile().lastIndexOf("/") + 1);
+        String fileName = getDirectoryNameFromUrl(url);
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
             downloadDir.mkdir();
@@ -37,6 +37,10 @@ public class IOUtils {
         }
 
         return downloadedFilePath;
+    }
+
+    public static String getDirectoryNameFromUrl(URL url) {
+        return url.getFile().substring(url.getFile().lastIndexOf("/") + 1);
     }
 
 }

@@ -13,3 +13,6 @@ out
 
 # NetBeans
 .nbattrs
+
+# local conf
+local.*.properties
