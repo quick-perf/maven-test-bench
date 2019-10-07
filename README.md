@@ -24,12 +24,12 @@ Feel free to use this project and contribute to it!
 # General setup
 
 This project contains two types of test:
-- `MvnValidateAllocationByMaven3VersionTest` can be used to evaluate the heap allocation level for a range of Maven versions,
-- for a given Maven version, `MvnValidateProfilingTest` can be used to investigate the origin of allocation.
+- `org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest` can be used to evaluate the heap allocation level for a range of Maven versions,
+- for a given Maven version, `org.quickperf.maven.bench.MvnValidateProfilingTest` can be used to investigate the origin of allocation.
 
 This general setup part describes configurations common to both tests.
 
-You have to define values to the `project-under-test.path` and `maven.binaries.path` properties contained in the `maven-bench.properties` file. The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`.
+You have to define values to the `project-under-test.path` and `maven.binaries.path` properties contained in the `maven-bench.properties` file. The other properties are only used by `org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest`.
 
 The `project-under-test.path` represents the path of the project on which `mvn validate` will be applied. 
 Our next measures are based on the Apache Camel project, but you can choose your own target. For reproducibility of our measure, a precisely defined version of this project was chosen:
@@ -51,7 +51,7 @@ Heap size is fixed with the help of [@HeapSize](https://github.com/quick-perf/do
 
 # Benchmark heap allocation of several Maven releases
 
-`MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
+`org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
 
 Heap allocation level is measured with the help of [@MeasureHeapAllocation](https://github.com/quick-perf/doc/wiki/JVM-annotations#Verify-heap-allocation) QuickPerf annotation. This annotation measures the heap allocation level of the thread running the method annotated with @Test.
 Feel free to contribute to QuickPerf by adding a feature allowing to measure the allocation level aggregated across all the threads! With `mvn validate`, we have checked that Maven code is not multithreaded during this validate phase by profiling the JVM with the help of [@ProfileJvm](https://github.com/quick-perf/doc/wiki/JVM-annotations#ProfileJvm).
@@ -66,7 +66,7 @@ You also have to give a value for the following properties contained in the [mav
 
 The meaning of these properties is given in the [maven-bench.properties](src/test/resources/maven-bench.properties) file.
 
-Measures can be launched with this command line: ```mvn -Dtest=MvnValidateAllocationByMaven3VersionTest test```.
+Measures can be launched with this command line: ```mvn -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest test```.
 Before doing it, you can close your IDE, web browser or other applications to free memory.
 
 The benchmark results are exported into a `maven-memory-allocation-{date-time}.csv` file. The execution context (processor, OS, ...) is reported in an `execution-context-{date-time}.txt` file.
@@ -90,12 +90,12 @@ But where the allocation comes from? In the following part we will see how to sp
 
 # Investigate where heap allocation comes from
 
-You can use `MvnValidateProfilingTest` to understand the origin of heap allocation.
+You can use `org.quickperf.maven.bench.MvnValidateProfilingTest` to understand the origin of heap allocation.
 Some of the set up requirements can be found in [General setup](#General-setup) part.
 
 The Maven version under test can be set with the `MAVEN_3_VERSION` constant:
 ``` java
-    public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_6_2;
+    public static org.quickperf.maven.bench.projects.Maven3Version MAVEN_3_VERSION = org.quickperf.maven.bench.projects.Maven3Version.V_3_6_2;
 ```
 
 A test method is annotated with [@ProfileJvm](https://github.com/quick-perf/doc/wiki/JVM-annotations#Profile-or-check-your-JVM) to profile the test method with Java Flight Recorder (JFR).

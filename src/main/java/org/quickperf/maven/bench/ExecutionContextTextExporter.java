@@ -1,3 +1,6 @@
+package org.quickperf.maven.bench;
+
+import org.quickperf.maven.bench.config.BenchProperties;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.HardwareAbstractionLayer;

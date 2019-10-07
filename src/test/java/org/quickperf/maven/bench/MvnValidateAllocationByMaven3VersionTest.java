@@ -1,3 +1,5 @@
+package org.quickperf.maven.bench;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -9,6 +11,9 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
+import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.projects.Maven3Version;
+import org.quickperf.maven.bench.projects.ProjectUnderTest;
 import org.quickperf.repository.LongFileRepository;
 import org.quickperf.repository.ObjectFileRepository;
 import org.slf4j.Logger;
@@ -22,7 +27,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.experimental.results.PrintableResult.testResult;
 
@@ -80,7 +87,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
     }
 
-    public static final String MAVEN_3_VERSION_FILE_NAME = "Maven3Version";
+    public static final String MAVEN_3_VERSION_FILE_NAME = "org.quickperf.maven.bench.projects.Maven3Version";
 
     private final String tempDirPath = System.getProperty("java.io.tmpdir");
 

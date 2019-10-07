@@ -1,5 +1,8 @@
+package org.quickperf.maven.bench.projects;
+
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import org.quickperf.maven.bench.config.BenchProperties;
 
 import java.io.File;
 import java.io.FileOutputStream;

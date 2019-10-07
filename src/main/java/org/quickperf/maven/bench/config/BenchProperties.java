@@ -1,3 +1,7 @@
+package org.quickperf.maven.bench.config;
+
+import org.quickperf.maven.bench.projects.Maven3Version;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

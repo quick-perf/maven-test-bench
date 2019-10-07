@@ -1,3 +1,5 @@
+package org.quickperf.maven.bench;
+
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.junit.Before;
@@ -9,6 +11,8 @@ import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.ProfileJvm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.projects.Maven3Version;
 
 import java.io.IOException;
 import java.util.Collections;

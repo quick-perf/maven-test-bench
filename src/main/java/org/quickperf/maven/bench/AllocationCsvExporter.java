@@ -1,5 +1,8 @@
+package org.quickperf.maven.bench;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.quickperf.maven.bench.projects.Maven3Version;
 
 import java.io.File;
 import java.io.FileWriter;
