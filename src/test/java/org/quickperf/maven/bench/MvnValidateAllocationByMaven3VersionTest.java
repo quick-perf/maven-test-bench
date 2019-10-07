@@ -153,7 +153,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         String measurementsExportPathName = BenchProperties.INSTANCE.getExportPathOfMeasures();
         final Path measurementsExportPath = Paths.get(measurementsExportPathName);
         if (Files.notExists(measurementsExportPath)) {
-            Files.createDirectory(measurementsExportPath);
+            Files.createDirectories(measurementsExportPath);
         }
         String fileName = "maven-memory-allocation" + "-" + dateTimeAsString + ".csv";
         return measurementsExportPathName + File.separator + fileName;
