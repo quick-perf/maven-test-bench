@@ -147,7 +147,7 @@ public class BenchProperties {
 
         private Properties loadProperties(String fileName) {
             Properties properties = new Properties();
-            String propertiesFilePath = findSrcTestResourcePath() + File.separator + fileName;
+            String propertiesFilePath = BenchProperties.class.getClassLoader().getResource(fileName).getPath();
             try (final FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
                 properties.load(fileInputStream);
             } catch (IOException fileNotFoundEx) {
