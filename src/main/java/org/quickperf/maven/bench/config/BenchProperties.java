@@ -15,8 +15,6 @@ public class BenchProperties {
         initializeProperties();
     }
 
-    private String fileName = "maven-bench.properties";
-
     private int numberOfMeasuresByMavenVersion;
 
     private String exportPathOfMeasures;
@@ -31,7 +29,7 @@ public class BenchProperties {
 
     private void initializeProperties() {
         // Properties properties = loadProperties();
-        BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver(fileName);
+        BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver();
 
         String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
         this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
@@ -113,52 +111,4 @@ public class BenchProperties {
         return maven3VersionsToMeasure;
     }
 
-    @FunctionalInterface
-    private interface BenchPropertiesResolver {
-        String getProperty(String key);
-    }
-
-    private static class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
-
-        private final List<BenchPropertiesResolver> resolvers = new ArrayList<>();
-
-        private DefaultBenchPropertiesResolver(String fileName) {
-            resolvers.add(key -> System.getenv(key));
-            resolvers.add(key -> System.getProperty(key));
-            resolvers.add(new BenchPropertiesFileBasedResolver("local." + fileName));
-            resolvers.add(new BenchPropertiesFileBasedResolver(fileName));
-        }
-
-        @Override
-        public String getProperty(String key) {
-            return resolvers.stream()
-                .map(benchPropertiesResolver -> benchPropertiesResolver.getProperty(key))
-                .filter(Objects::nonNull)
-                .findFirst().orElse(null);
-        }
-    }
-
-    private static class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
-        private Properties props;
-
-        private BenchPropertiesFileBasedResolver(String fileName) {
-            this.props = this.loadProperties(fileName);
-        }
-
-        private Properties loadProperties(String fileName) {
-            Properties properties = new Properties();
-            String propertiesFilePath = BenchProperties.class.getClassLoader().getResource(fileName).getPath();
-            try (final FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
-                properties.load(fileInputStream);
-            } catch (IOException fileNotFoundEx) {
-                throw new IllegalStateException("Unable to load bench properties.", fileNotFoundEx);
-            }
-            return properties;
-        }
-
-        @Override
-        public String getProperty(String key) {
-            return props.getProperty(key);
-        }
-    }
 }
