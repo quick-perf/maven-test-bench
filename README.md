@@ -28,7 +28,7 @@ This project contains two types of measures against Maven build execution, each 
 # General setup
 
 This general setup part describes configuration common to both tests, done in `src/test/resourrces/maven-bench.properties` file:
-- the `project-under-test.path` represents the path of the project on which `mvn validate` will be applied,
+- the `testing.project.path` represents the path of the project on which `mvn validate` will be applied,
 - the `maven.binaries.path` property corresponds to the path where the needed Maven distributions will be automatically downloaded by the tests.
 The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`.
  

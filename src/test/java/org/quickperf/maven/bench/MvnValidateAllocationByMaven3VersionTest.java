@@ -13,7 +13,7 @@ import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
 import org.quickperf.maven.bench.config.BenchProperties;
 import org.quickperf.maven.bench.projects.Maven3Version;
-import org.quickperf.maven.bench.projects.ProjectUnderTest;
+import org.quickperf.maven.bench.projects.TestingProject;
 import org.quickperf.repository.LongFileRepository;
 import org.quickperf.repository.ObjectFileRepository;
 import org.slf4j.Logger;
@@ -42,11 +42,11 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
         private static final String TEMP_DIR_PATH = System.getProperty("java.io.tmpdir");
 
-        public static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
+        private static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
         // private final String pathOfMavenProjectUnderTest = ;
-        private final ProjectUnderTest projectUnderTest = new ProjectUnderTest(
+        private final TestingProject projectUnderTest = new TestingProject(
                 BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
                 "https://github.com/apache/camel/archive/camel-2.23.4.zip"
         );
@@ -87,7 +87,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
     }
 
-    public static final String MAVEN_3_VERSION_FILE_NAME = "org.quickperf.maven.bench.projects.Maven3Version";
+    private static final String MAVEN_3_VERSION_FILE_NAME = "org.quickperf.maven.bench.projects.Maven3Version";
 
     private final String tempDirPath = System.getProperty("java.io.tmpdir");
 

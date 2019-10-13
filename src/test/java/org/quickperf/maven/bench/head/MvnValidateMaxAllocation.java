@@ -11,10 +11,9 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
 import org.quickperf.jvm.annotations.HeapSize;
-import org.quickperf.jvm.annotations.MeasureHeapAllocation;
 import org.quickperf.maven.bench.config.BenchProperties;
 import org.quickperf.maven.bench.projects.Maven3Version;
-import org.quickperf.maven.bench.projects.ProjectUnderTest;
+import org.quickperf.maven.bench.projects.TestingProject;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -25,7 +24,7 @@ public class MvnValidateMaxAllocation {
 	@RunWith(QuickPerfJUnitRunner.class)
 	public static class MvnValidate {
 
-		private final ProjectUnderTest apacheCamelProject = new ProjectUnderTest(
+		private final TestingProject apacheCamelProject = new TestingProject(
 				BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
 				"https://github.com/apache/camel/archive/camel-2.23.4.zip"
 		);
