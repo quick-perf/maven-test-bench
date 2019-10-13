@@ -9,8 +9,10 @@ class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
     private static final String CONFIG_FILENAME = "maven-bench.properties";
     private final List<BenchPropertiesResolver> resolvers = new ArrayList<>();
     DefaultBenchPropertiesResolver() {
-        resolvers.add(System::getenv);
-        resolvers.add(System::getProperty);
+        resolvers.add(key -> {
+            final String name = key.toUpperCase().replace('.', '_');
+            return System.getenv(name);
+        });
         addBenchPropertiesFromFile(resolvers, "local." + CONFIG_FILENAME);
         addBenchPropertiesFromFile(resolvers, CONFIG_FILENAME);
     }
