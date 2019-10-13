@@ -39,7 +39,7 @@ public class BenchProperties {
 
         this.mavenBinariesPath = properties.getProperty("maven.binaries.path");
 
-        this.projectUnderTest = properties.getProperty("project-under-test.path");
+        this.projectUnderTest = properties.getProperty("testing.project.path");
 
         this.exportPathOfMeasures = properties.getProperty("measures.export.path");
 

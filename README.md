@@ -29,9 +29,9 @@ This project contains two types of test:
 
 This general setup part describes configurations common to both tests.
 
-You have to define values to the `project-under-test.path` and `maven.binaries.path` properties contained in the `maven-bench.properties` file. The other properties are only used by `org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest`.
+You have to define values to the `testing.project.path` and `maven.binaries.path` properties contained in the `maven-bench.properties` file. The other properties are only used by `org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest`.
 
-The `project-under-test.path` represents the path of the project on which `mvn validate` will be applied. 
+The `testing.project.path` represents the path of the project on which `mvn validate` will be applied. 
 Our next measures are based on the Apache Camel project, but you can choose your own target. For reproducibility of our measure, a precisely defined version of this project was chosen:
 ```
 git clone -n https://github.com/apache/camel.git

@@ -12,19 +12,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ProjectUnderTest {
+public class TestingProject {
 
     private String path;
     private final String downloadZipSource;
 
-    public static void main(final String... args) throws IOException {
-        final BenchProperties bp = BenchProperties.INSTANCE;
-        final ProjectUnderTest prj = new ProjectUnderTest("/tmp/camel",
-                "https://github.com/apache/camel/archive/camel-2.23.4.zip");
-        prj.installProject();
-    }
-
-    public ProjectUnderTest(String projectPath, String downloadFrom) {
+    public TestingProject(String projectPath, String downloadFrom) {
         this.path = projectPath;
         this.downloadZipSource = downloadFrom;
     }
@@ -40,6 +33,8 @@ public class ProjectUnderTest {
         final FileHeader rootFileHeader = zipFile.getFileHeaders().get(0);
         if (rootFileHeader.isDirectory()) {
             final Path currentProjectPath = Paths.get(this.path);
+            System.out.println(path);
+            System.out.println(currentProjectPath);
             final String parentDirectoryPath = currentProjectPath.getParent().toString();
             zipFile.extractAll(parentDirectoryPath);
             final Path extractProjectDirPath = Paths.get(parentDirectoryPath + File.separator + rootFileHeader.getFileName());
