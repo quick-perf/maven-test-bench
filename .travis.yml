@@ -8,3 +8,7 @@ script:
   - make maven.build
   - make test.settings
   - make test.runNonRegMvn
+
+cache:
+  directories:
+    - $HOME/.m2
