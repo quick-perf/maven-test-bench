@@ -12,7 +12,7 @@ APACHE_CAMEL_DIR := $(TESTING_DIR)/camel
 .PHONY: test
 
 build: config
-	mvn clean package
+	mvn clean package -B
 
 config:
 	@echo "maven.version.to = 3.2.5" > src/test/resources/local.maven-bench.properties
@@ -35,6 +35,6 @@ test.settings:
 	mv -n $(APACHE_MAVEN_DIR)/apache-maven-$($@_MVN_VERSION) $(APACHE_MAVEN_BUILT_TO_TEST_DIR)
 
 test.runNonRegMvn:
-	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation
+	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
 
 test.nonRegMvn: maven.clone maven.build test.settings test.runNonRegMvn
