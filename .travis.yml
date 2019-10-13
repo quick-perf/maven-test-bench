@@ -1,0 +1,10 @@
+language: java
+
+jdk: openjdk11
+
+script:
+  - make build
+  - make maven.clone
+  - make maven.build
+  - make test.settings
+  - make test.runNonRegMvn
