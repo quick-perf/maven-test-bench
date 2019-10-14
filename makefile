@@ -15,12 +15,18 @@ build: config
 	mvn clean package -B
 
 config:
-	@echo "maven.version.to = 3.2.5" > src/test/resources/local.maven-bench.properties
+	$(shell [[ -d $(APACHE_CAMEL_DIR) ]] || ( \
+			mkdir -p $(APACHE_CAMEL_DIR) \
+			&& git clone -n https://github.com/apache/camel.git $(APACHE_CAMEL_DIR) \
+			&& cd $(APACHE_CAMEL_DIR) \
+			&& git checkout c409ab7aabb971065fc8384a861904d2a2819be5) \
+	)
+	@echo "maven.version.to = 3.6.2" > src/test/resources/local.maven-bench.properties
 	@echo "measures.number-by-maven-version = 1" >> src/test/resources/local.maven-bench.properties
 
 test: build test.nonRegMvn
 
-maven.clone:
+maven.clone: config
 	$(shell [[ -d $(APACHE_MAVEN_MASTER_DIR) ]] || ( \
 			mkdir -p $(APACHE_MAVEN_DIR) \
 			&& git clone https://gitbox.apache.org/repos/asf/maven.git $(APACHE_MAVEN_MASTER_DIR)) \
