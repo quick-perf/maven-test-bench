@@ -25,8 +25,16 @@ public class BenchProperties {
     private String mavenBinariesPath;
 
     private String projectUnderTest;
+    
+    private String commitFirstHash;
+    
+	private String commitLastHash;
+	
+	private String mavenSourceBranch;
 
-    private List<Maven3Version> maven3VersionsToMeasure;
+	private String mavenSourcePath;
+
+	private List<Maven3Version> maven3VersionsToMeasure;
 
     private void initializeProperties() {
         try {
@@ -45,6 +53,14 @@ public class BenchProperties {
             this.exportPathOfMeasures = properties.getProperty("measures.export.path");
 
             this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
+            
+            this.commitFirstHash=properties.getProperty("commit.first.hash");
+            
+            this.commitLastHash=properties.getProperty("commit.last.hash");
+            
+            this.mavenSourcePath = properties.getProperty("maven.sources.path");
+            
+            this.mavenSourceBranch=properties.getProperty("maven.sources.branch","master");
 
         } catch (IOException e) {
             throw new IllegalStateException("Unable to load bench properties.", e);
@@ -124,5 +140,22 @@ public class BenchProperties {
     public List<Maven3Version> getMaven3VersionsToMeasure() {
         return maven3VersionsToMeasure;
     }
+    
+    public String getCommitFirstHash() {
+		return commitFirstHash;
+	}
+
+	public String getCommitLastHash() {
+		return commitLastHash;
+	}
+	
+    public String getMavenSourceBranch() {
+		return mavenSourceBranch;
+	}
+    
+	
+	public String getMavenSourcePath() {
+		return mavenSourcePath;
+	}
 
 }
