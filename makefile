@@ -42,8 +42,8 @@ test.runNonRegMvn:
 	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
 
 test.runMeasureOnHead:
-	export MAVEN_VERSION_FROM=head
-	export MAVEN_VERSION_TO=head
+	@echo "maven.version.from=head" > src/test/resources/local.maven-bench.properties
+	@echo "maven.version.to=head" >> src/test/resources/local.maven-bench.properties
 	mvn test -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
 
 test.nonRegMvn: maven.clone maven.build test.settings test.runNonRegMvn
