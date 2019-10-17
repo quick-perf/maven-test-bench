@@ -21,8 +21,6 @@ config:
 			&& cd $(APACHE_CAMEL_DIR) \
 			&& git checkout c409ab7aabb971065fc8384a861904d2a2819be5) \
 	)
-	@echo "maven.version.to = 3.6.2" > src/test/resources/local.maven-bench.properties
-	@echo "measures.number-by-maven-version = 1" >> src/test/resources/local.maven-bench.properties
 
 test: build test.nonRegMvn
 
@@ -43,4 +41,11 @@ test.settings:
 test.runNonRegMvn:
 	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
 
+test.runMeasureOnHead:
+	export MAVEN_VERSION_FROM=head
+	export MAVEN_VERSION_TO=head
+	mvn test -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
+
 test.nonRegMvn: maven.clone maven.build test.settings test.runNonRegMvn
+
+test.measureOnHead: maven.clone maven.build test.settings test.runMeasureOnHead
