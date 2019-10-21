@@ -30,6 +30,7 @@ public enum Maven3Version {
     ,V_3_6_1("3.6.1")
     ,V_3_6_2("3.6.2")
     ,HEAD("head")
+    ,HASH("hash")
     ;
 
     private final String numVersion;
