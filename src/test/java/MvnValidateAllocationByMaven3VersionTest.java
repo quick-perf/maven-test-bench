@@ -11,6 +11,8 @@ import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
 import org.quickperf.repository.LongFileRepository;
 import org.quickperf.repository.ObjectFileRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -22,6 +24,8 @@ import java.util.*;
 import static org.junit.experimental.results.PrintableResult.testResult;
 
 public class MvnValidateAllocationByMaven3VersionTest {
+	
+    private Logger logger = LoggerFactory.getLogger(MvnValidateAllocationByMaven3VersionTest.class);
 
     @RunWith(QuickPerfJUnitRunner.class)
     public static class MvnValidate {
@@ -71,7 +75,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
     @Test
     public void measure() throws IOException {
-
+    	logger.debug("measure - start");
         String dateTimeAsString = getDateTimeAsString();
         String resultFilePath = buildAllocationCsvExportPath(dateTimeAsString);
 
@@ -98,7 +102,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         }
 
         ExecutionContextTextExporter.INSTANCE.writeExecutionContextToTextFile(dateTimeAsString);
-
+        logger.debug("measure - end");
     }
 
     private void saveMavenVersion(Maven3Version maven3Version) {
