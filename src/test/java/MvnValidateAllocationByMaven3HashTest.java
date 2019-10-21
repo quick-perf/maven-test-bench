@@ -12,6 +12,8 @@ import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
 import org.quickperf.repository.LongFileRepository;
 import org.quickperf.repository.ObjectFileRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -34,6 +36,8 @@ import static org.junit.experimental.results.PrintableResult.testResult;
 
 public class MvnValidateAllocationByMaven3HashTest {
 
+    private Logger logger = LoggerFactory.getLogger(MvnValidateAllocationByMaven3HashTest.class);
+	
 	@RunWith(QuickPerfJUnitRunner.class)
 	public static class MvnValidate {
 
@@ -75,7 +79,7 @@ public class MvnValidateAllocationByMaven3HashTest {
 
 	@Test
 	public void measure() throws IOException {
-
+		logger.debug("measure - start");
 		if (!Maven3Version.V_3_6_2.alreadyDownloaded()) {
 			Maven3Version.V_3_6_2.download();
 			System.out.println();
@@ -116,7 +120,7 @@ public class MvnValidateAllocationByMaven3HashTest {
 //		AllocationCsvExporter.INSTANCE.writeAllocationsToCsv(allocations, resultFilePath);
 
 		//ExecutionContextTextExporter.INSTANCE.writeExecutionContextToTextFile(dateTimeAsString);
-
+		logger.debug("measure - end");
 	}
 
 	private Path getBuiltPath(String sourcePath, String name, String subProjectName) throws ZipException {
@@ -156,6 +160,7 @@ public class MvnValidateAllocationByMaven3HashTest {
 //	}
 	
 	@Test
+	//TODO: delete after proper implementation
 	public void measureTest() throws IOException {
 		String sourcePath = BenchProperties.INSTANCE.getMavenSourcePath();
 		Path hashMavenBuilt = getBuiltPath(sourcePath, "maven", "apache-maven");

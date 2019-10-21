@@ -53,13 +53,12 @@
 			<artifactId>oshi-core</artifactId>
 			<version>4.0.0</version>
 		</dependency>
-		<dependency>
-			<!-- To avoid "SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder" 
-				with oshi-core -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.25</version>
-		</dependency>
+		<dependency> 
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		  <version>1.7.28</version>
+		  <scope>test</scope>
+		</dependency>		
 	</dependencies>
 
 </project>

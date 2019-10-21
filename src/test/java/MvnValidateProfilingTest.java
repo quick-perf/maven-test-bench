@@ -7,6 +7,8 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.ProfileJvm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @RunWith(QuickPerfJUnitRunner.class)
 public class MvnValidateProfilingTest {
+	
+    private Logger logger = LoggerFactory.getLogger(MvnValidateProfilingTest.class);
 
     public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_2_5;
 
@@ -27,7 +31,9 @@ public class MvnValidateProfilingTest {
     @HeapSize(value = 6, unit = AllocationUnit.GIGA_BYTE)
     @Test
     public void execute_maven_validate() throws VerificationException {
+    	logger.debug("execute_maven_validate - start");
         verifier.executeGoals(validate);
+        logger.debug("execute_maven_validate - end");
     }
 
     @Before
