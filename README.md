@@ -11,7 +11,7 @@
 <p align="center">
 <a href="#Investigate-where-heap-allocation-comes-from">Investigate where heap allocation comes from</a>  •
   <a href="#perspectives">Perspectives</a> •
-  <a href="#Acknowledgments">Acknowledgments</a> •
+  <a href="#Contributors">Contributors</a> •
   <a href="#License">License</a> 
 </p>
 
@@ -133,8 +133,45 @@ Some issues are also available [here](https://github.com/quick-perf/maven-test-b
 
 You also have [QuickPerf issues](https://github.com/quick-perf/quickperf/issues) to build new performance tools!
 
-# Acknowledgments
-Many thanks to Hervé Boutemy for his help and support to start this project.
+# Contributors
+Many thanks to all our contributors!
+
+<table>
+    <tr>
+        <td align="center">
+            <a href="https://github.com/jeanbisutti">
+                <img src="https://avatars1.githubusercontent.com/u/14811066?v=4" width="100px;" alt="Jean Bisutti"/>
+                <br/>
+                <sub><b>Jean Bisutti</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=jeanbisutti" title="Ideas">🤔</a>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=jeanbisutti" title="Code">💻</a>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=jeanbisutti" title="Documentation">📖</a>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=jeanbisutti" title="Reviewed Pull Requests">👀</a>
+        </td>       
+        <td align="center">
+            <a href="https://github.com/hboutemy">
+                <img src="https://avatars1.githubusercontent.com/u/237462?v=4" width="100px;" alt="Hervé Boutemy"/>
+                <br/>
+                <sub><b>Hervé Boutemy</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=hboutemy" title="Ideas">🤔</a>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=hboutemy" title="Documentation">📖</a>
+        </td>        
+        <td align="center">
+            <a href="https://github.com/albertotn">
+                <img src="https://avatars1.githubusercontent.com/u/12526457?v=4" width="100px;" alt="Alberto Martinelli"/>
+                <br/>
+                <sub><b>Alberto Martinelli</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=albertotn" title="Code">💻</a>
+        </td>
+    </tr>
+</table>
+<a href = "https://allcontributors.org/docs/en/emoji-key">emoji key</a>
 
 # License
 [Apache License 2.0](/LICENSE.txt)
