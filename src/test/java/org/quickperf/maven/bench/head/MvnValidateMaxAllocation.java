@@ -53,7 +53,7 @@ public class MvnValidateMaxAllocation {
 		}
 
 		@HeapSize(value = 1, unit = AllocationUnit.GIGA_BYTE)
-		@ExpectMaxHeapAllocation(value = 3.2, unit = AllocationUnit.GIGA_BYTE)
+		@ExpectMaxHeapAllocation(value = 3.75, unit = AllocationUnit.GIGA_BYTE)
 		@Test
 		public void execute_maven_validate() throws VerificationException {
 			verifier.executeGoals(validate);
