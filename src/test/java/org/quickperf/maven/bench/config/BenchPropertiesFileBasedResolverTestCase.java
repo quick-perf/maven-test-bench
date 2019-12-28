@@ -4,12 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Properties;
-
-import static org.junit.Assert.*;
 
 public class BenchPropertiesFileBasedResolverTestCase {
-
 
     @Test
     public void createBenchPropertiesFileBasedResolverShouldReturnResolverWhenFileExists() throws IOException {
@@ -27,4 +23,5 @@ public class BenchPropertiesFileBasedResolverTestCase {
         Assert.assertNull(props.getProperty("doesNotExist"));
         Assert.assertEquals("Hello World!", props.getProperty("person.say"));
     }
+
 }
