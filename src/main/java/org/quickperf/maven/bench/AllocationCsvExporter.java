@@ -56,7 +56,7 @@ public class AllocationCsvExporter {
         }
         
         for (int i = 1; i < numberOfAllocations + 1; i++) {
-        	csvHeaders[i + 7+ numberOfAllocations] = "Lenght" + " " + i + " "+ "(seconds)";
+        	csvHeaders[i + 7+ numberOfAllocations] = "Length" + " " + i + " "+ "(seconds)";
         }
 
         for (int i = 1; i < numberOfAllocations + 1; i++) {
