@@ -4,7 +4,6 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.apache.commons.io.FileUtils;
 import org.quickperf.maven.bench.IOUtils;
-import org.quickperf.maven.bench.config.BenchProperties;
 
 import java.io.File;
 import java.io.IOException;
