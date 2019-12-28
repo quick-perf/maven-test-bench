@@ -14,18 +14,13 @@ public class IOUtils {
     private IOUtils(){}
 
     public static String download(String sourceUrlAsString, String targetPath) {
-        URL url = null;
-        try {
-            url = new URL(sourceUrlAsString);
-        } catch (MalformedURLException malformedUrlEx) {
-            throw new IllegalArgumentException("source url is not well formatted.", malformedUrlEx);
-        }
 
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
             downloadDir.mkdir();
         }
 
+        URL url = buildURL(sourceUrlAsString);
         String fileName = getDirectoryNameFromUrl(url);
         final String downloadedFilePath = String.format("%s/%s", targetPath, fileName);
         try (
@@ -39,6 +34,14 @@ public class IOUtils {
         }
 
         return downloadedFilePath;
+    }
+
+    private static URL buildURL(String sourceUrlAsString) {
+        try {
+            return new URL(sourceUrlAsString);
+        } catch (MalformedURLException malformedUrlEx) {
+            throw new IllegalArgumentException("source url is not well formatted.", malformedUrlEx);
+        }
     }
 
     public static String getDirectoryNameFromUrl(URL url) {
