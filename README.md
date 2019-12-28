@@ -169,6 +169,15 @@ Many thanks to all our contributors!
             <br/>
             <a href="https://github.com/quick-perf/maven-test-bench/commits?author=albertotn" title="Code">💻</a>
         </td>
+        <td align="center">
+            <a href="https://github.com/pcavezzan">
+                <img src="https://avatars2.githubusercontent.com/u/3405916?v=4" width="100px;" alt="Patrice Cavezzan"/>
+                <br/>
+                <sub><b>Patrice Cavezzan</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=pcavezzan" title="Code">💻</a>
+        </td>        
     </tr>
 </table>
 <a href = "https://allcontributors.org/docs/en/emoji-key">emoji key</a>
