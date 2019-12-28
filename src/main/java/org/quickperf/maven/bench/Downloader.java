@@ -9,11 +9,13 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
-public class IOUtils {
+public class Downloader {
 
-    private IOUtils(){}
+    public static final Downloader INSTANCE = new Downloader();
 
-    public static String download(String sourceUrlAsString, String targetPath) {
+    private Downloader(){}
+
+    public String download(String sourceUrlAsString, String targetPath) {
 
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
@@ -36,7 +38,7 @@ public class IOUtils {
         return downloadedFilePath;
     }
 
-    private static URL buildURL(String sourceUrlAsString) {
+    private URL buildURL(String sourceUrlAsString) {
         try {
             return new URL(sourceUrlAsString);
         } catch (MalformedURLException malformedUrlEx) {
@@ -44,7 +46,7 @@ public class IOUtils {
         }
     }
 
-    public static String getDirectoryNameFromUrl(URL url) {
+    private String getDirectoryNameFromUrl(URL url) {
         return url.getFile().substring(url.getFile().lastIndexOf("/") + 1);
     }
 

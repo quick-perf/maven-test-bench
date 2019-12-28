@@ -3,7 +3,7 @@ package org.quickperf.maven.bench.projects;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.apache.commons.io.FileUtils;
-import org.quickperf.maven.bench.IOUtils;
+import org.quickperf.maven.bench.Downloader;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,8 @@ public class TestingProject {
     }
 
     public void installProject() throws IOException {
-        final String zipLocalPath = IOUtils.download(this.downloadZipSource, FileUtils.getTempDirectoryPath());
+        Downloader downloader = Downloader.INSTANCE;
+        final String zipLocalPath = downloader.download(this.downloadZipSource, FileUtils.getTempDirectoryPath());
 
         final ZipFile zipFile = new ZipFile(zipLocalPath);
         final FileHeader rootFileHeader = zipFile.getFileHeaders().get(0);
