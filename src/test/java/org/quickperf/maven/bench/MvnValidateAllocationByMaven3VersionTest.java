@@ -45,7 +45,6 @@ public class MvnValidateAllocationByMaven3VersionTest {
         private static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
-        // private final String pathOfMavenProjectUnderTest = ;
         private final TestingProject projectUnderTest = new TestingProject(
                 BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
                 "https://github.com/apache/camel/archive/camel-2.23.4.zip"
