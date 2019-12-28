@@ -28,7 +28,6 @@ public class BenchProperties {
     private List<Maven3Version> maven3VersionsToMeasure;
 
     private void initializeProperties() {
-        // Properties properties = loadProperties();
         BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver();
 
         String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
@@ -45,11 +44,6 @@ public class BenchProperties {
 
         this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
 
-    }
-
-    private static String findSrcTestResourcePath() {
-        File file = new File("src/test/resources");
-        return file.getAbsolutePath();
     }
 
     private List<Maven3Version> findMaven3VersionsToMeasure(BenchPropertiesResolver properties) {
