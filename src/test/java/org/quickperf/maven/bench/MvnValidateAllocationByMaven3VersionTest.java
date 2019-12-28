@@ -180,11 +180,11 @@ public class MvnValidateAllocationByMaven3VersionTest {
             System.out.println("Allocation can't be measured. " + printableResult.toString());
         }
         Long allocationInBytes = retrieveMeasuredAllocationInBytes();
-        Long lenghtInSeconds = executionTimeInMilliseconds/1000l;
+        Long lengthInSeconds = executionTimeInMilliseconds/1000l;
         System.out.println("Allocation in bytes: " + allocationInBytes);
-        System.out.println("Lenght in seconds: " + lenghtInSeconds);
+        System.out.println("Length in seconds: " + lengthInSeconds);
         System.out.println("----------------");
-        return new AllocationTimePair(allocationInBytes, lenghtInSeconds);
+        return new AllocationTimePair(allocationInBytes, lengthInSeconds);
     }
 
     private void deleteQuickPerfFoldersInTemp() throws IOException {
