@@ -21,12 +21,12 @@ public class IOUtils {
             throw new IllegalArgumentException("source url is not well formatted.", malformedUrlEx);
         }
 
-        String fileName = getDirectoryNameFromUrl(url);
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
             downloadDir.mkdir();
         }
 
+        String fileName = getDirectoryNameFromUrl(url);
         final String downloadedFilePath = String.format("%s/%s", targetPath, fileName);
         try (
                 final FileOutputStream fileOutputStream = new FileOutputStream(downloadedFilePath);
