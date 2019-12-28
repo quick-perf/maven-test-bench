@@ -3,7 +3,7 @@ package org.quickperf.maven.bench;
 public class AllocationTimePair {
 
 	private final Long allocationInBytes;
-	private final  Long lenghtInSeconds;
+	private final Long lenghtInSeconds;
 
 	public AllocationTimePair(Long allocationInBytes, Long lenghtInSeconds) {
 		this.allocationInBytes = allocationInBytes;
