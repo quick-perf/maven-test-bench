@@ -13,10 +13,10 @@ public class IOUtils {
 
     private IOUtils(){}
 
-    public static String download(String sourceUrl, String targetPath) {
+    public static String download(String sourceUrlAsString, String targetPath) {
         URL url = null;
         try {
-            url = new URL(sourceUrl);
+            url = new URL(sourceUrlAsString);
         } catch (MalformedURLException malformedUrlEx) {
             throw new IllegalArgumentException("source url is not well formatted.", malformedUrlEx);
         }
