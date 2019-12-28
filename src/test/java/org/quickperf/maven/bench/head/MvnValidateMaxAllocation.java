@@ -2,7 +2,6 @@ package org.quickperf.maven.bench.head;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.results.PrintableResult;
@@ -69,15 +68,19 @@ public class MvnValidateMaxAllocation {
 
 		// WHEN
 		PrintableResult printableResult = PrintableResult.testResult(testClass);
+
 		// THEN
-		if(printableResult.failureCount() != 0) {
-			System.out.println("Allocation can't be measured. " + printableResult.toString());
-			Assert.fail();
+		if(testHasFailed(printableResult)) {
+			String junit4ErrorReport = printableResult.toString();
+			throw new AssertionError("Allocation greater than expected. "
+					                + System.lineSeparator()
+					                + junit4ErrorReport);
 		}
-		//  En cas d'échec cela serait pas mal d'afficher le message d'erreur
-		// du rapport de test : printableResult.toString()
 
 	}
 
+	private boolean testHasFailed(PrintableResult printableResult) {
+		return printableResult.failureCount() != 0;
+	}
 
 }
