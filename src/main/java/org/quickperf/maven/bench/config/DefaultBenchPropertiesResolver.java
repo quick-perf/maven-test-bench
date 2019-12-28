@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Objects;
 
 class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
+
     private static final String CONFIG_FILENAME = "maven-bench.properties";
+
     private final List<BenchPropertiesResolver> resolvers = new ArrayList<>();
+
     DefaultBenchPropertiesResolver() {
         resolvers.add(key -> {
             final String name = key.toUpperCase().replace('.', '_');
@@ -25,7 +28,6 @@ class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
         }
     }
 
-
     @Override
     public String getProperty(String key) {
         return resolvers.stream()
@@ -33,4 +35,5 @@ class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
             .filter(Objects::nonNull)
             .findFirst().orElse(null);
     }
+
 }
