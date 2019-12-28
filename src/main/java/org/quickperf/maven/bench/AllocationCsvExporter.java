@@ -78,7 +78,7 @@ public class AllocationCsvExporter {
         csvRecord.add(allocationStatistics.getMin());
         csvRecord.add(allocationStatistics.getMax());
 
-        LongSummaryStatistics lengthStatistics = Arrays.stream(input).collect(Collectors.summarizingLong(AllocationTimePair::getLenghtInSeconds));
+        LongSummaryStatistics lengthStatistics = Arrays.stream(input).collect(Collectors.summarizingLong(AllocationTimePair::getLengthInSeconds));
         double averageAllocationInSeconds = lengthStatistics.getAverage();
         csvRecord.add(averageAllocationInSeconds);
         csvRecord.add(lengthStatistics.getMin());
@@ -89,7 +89,7 @@ public class AllocationCsvExporter {
         }
         
         for (int i = 0; i < input.length; i++) {
-        	csvRecord.add(input[i].getLenghtInSeconds());
+        	csvRecord.add(input[i].getLengthInSeconds());
         }         
         
         for (int i = 0; i < input.length; i++) {
