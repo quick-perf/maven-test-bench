@@ -3,6 +3,8 @@ package org.quickperf.maven.bench.config;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
@@ -25,6 +27,7 @@ class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
         }
 
         String propertiesFilePath = resource.getPath();
+        propertiesFilePath = URLDecoder.decode(propertiesFilePath, StandardCharsets.UTF_8.toString());
         try (final FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
             properties.load(fileInputStream);
         }
