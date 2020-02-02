@@ -26,8 +26,7 @@ class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
             throw new IOException("file (" + fileName + ") not found.");
         }
 
-        String propertiesFilePath = resource.getPath();
-        propertiesFilePath = URLDecoder.decode(propertiesFilePath, StandardCharsets.UTF_8.toString());
+        String propertiesFilePath = URLDecoder.decode(resource.getPath(), StandardCharsets.UTF_8.toString());
         try (final FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
             properties.load(fileInputStream);
         }
