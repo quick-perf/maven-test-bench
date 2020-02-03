@@ -49,6 +49,56 @@ mvn -DdistributionTargetDir="{maven-distrib-location}/apache-maven-head" package
 
 Heap size is fixed with the help of [@HeapSize](https://github.com/quick-perf/doc/wiki/JVM-annotations#heapsize).
 
+# Contributing
+
+## Building the project
+
+```bash
+git clone https://github.com/pcavezzan/maven-test-bench.git
+make build
+```
+
+The above commandline will run behind the scene several actions:
+* clone Apache Camel project (comit ```c409ab7aabb971065fc8384a861904d2a2819be5```)
+* run ```mvn clean package```
+
+
+## Custom Build
+
+If you prefer to override some settings without editing the default configuration (```maven-bench.propertiers```), 
+you have several options:
+ 
+* environment variable
+* JAVA properties,
+* you can create a local configuration files ```local.maven-bench.properties``` without any risk to version it because 
+this file is ignored by GIT. In this file, just override the settings you want.
+
+### Overriding by setting environment variable
+
+```bash
+export MAVEN_VERSION_FROM=head
+export MAVEN_VERSION_TO=head
+mvn clean package
+```   
+
+### Overriding by setting JVM Properties
+
+```bash
+mvn clean package -Dmaven.version.from=head -Dmaven.version.to=head
+```
+
+### Overriding by creating local.maven-bench.properties
+
+```bash
+cat << EOF > src/main/resources/local.maven-bench.properties
+maven.version.from=head
+maven.version.to=head
+EOF
+mvn clean package
+```
+
+
+
 # Benchmark heap allocation of several Maven releases
 
 `org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
