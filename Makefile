@@ -11,10 +11,18 @@ APACHE_CAMEL_DIR := $(TESTING_DIR)/camel
 
 .PHONY: test
 
-build: config
-	mvn clean package -B
+clean:
+	mvn clean
 
-config:
+build: configure
+	mvn package -B
+
+configure: camel.clone maven.clone maven.build test.settings
+	mvn resources:resources resources:testResources
+
+test: build test.nonRegMvn
+
+camel.clone:
 	$(shell [[ -d $(APACHE_CAMEL_DIR) ]] || ( \
 			mkdir -p $(APACHE_CAMEL_DIR) \
 			&& git clone -n https://github.com/apache/camel.git $(APACHE_CAMEL_DIR) \
@@ -22,11 +30,9 @@ config:
 			&& git checkout c409ab7aabb971065fc8384a861904d2a2819be5) \
 	)
 
-test: build test.nonRegMvn
-
-maven.clone: config
+maven.clone:
 	$(shell [[ -d $(APACHE_MAVEN_MASTER_DIR) ]] || ( \
-			mkdir -p $(APACHE_MAVEN_DIR) \
+				mkdir -p $(APACHE_MAVEN_DIR) \
 			&& git clone https://gitbox.apache.org/repos/asf/maven.git $(APACHE_MAVEN_MASTER_DIR)) \
 	)
 
@@ -46,6 +52,6 @@ test.runMeasureOnHead:
 	@echo "maven.version.to=head" >> src/test/resources/local.maven-bench.properties
 	mvn test -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
 
-test.nonRegMvn: maven.clone maven.build test.settings test.runNonRegMvn
+test.nonRegMvn: configure test.runNonRegMvn
 
-test.measureOnHead: maven.clone maven.build test.settings test.runMeasureOnHead
+test.measureOnHead: configure test.runMeasureOnHead
