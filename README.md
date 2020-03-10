@@ -59,9 +59,13 @@ make build
 ```
 
 The above commandline will run behind the scene several actions:
-* clone Apache Camel project (comit ```c409ab7aabb971065fc8384a861904d2a2819be5```)
-* run ```mvn clean package```
+* clone Apache Camel project (commit ```c409ab7aabb971065fc8384a861904d2a2819be5```)
+* clone Apache Maven project on head commit,
+* build from source Apache Maven latest development version,
+* rename the built maven to ```apache-maven-head```, 
+* run ```mvn package -B```
 
+_Note: the build above could be stuck depending on your machine settings. If it is the case, I would suggest you to create a custom build (see below)._
 
 ## Custom Build
 
@@ -69,35 +73,49 @@ If you prefer to override some settings without editing the default configuratio
 you have several options:
  
 * environment variable
-* JAVA properties,
 * you can create a local configuration files ```local.maven-bench.properties``` without any risk to version it because 
 this file is ignored by GIT. In this file, just override the settings you want.
 
 ### Overriding by setting environment variable
 
 ```bash
-export MAVEN_VERSION_FROM=head
-export MAVEN_VERSION_TO=head
-mvn clean package
+export MAVEN_VERSION_FROM=3.6.1
+export MAVEN_VERSION_TO=3.6.2
+make build
 ```   
 
-### Overriding by setting JVM Properties
+### Overriding by creating local.maven-bench.properties
 
 ```bash
-mvn clean package -Dmaven.version.from=head -Dmaven.version.to=head
+cat << EOF > src/main/resources/local.maven-bench.properties
+maven.version.from=3.6.1
+maven.version.to=3.6.2
+EOF
+make build
 ```
 
-### Overriding by creating local.maven-bench.properties
+
+## Developing
+
+If you want to help us and make some code, you can easily get the project and open it up with your favorite IDE.
+
+
+### NOTE: if you want to debug head version of Maven
+
+First configure the project to use only head version of maven. For example, by creating a ```local.maven-bench.properties``` 
+in ```src/main/resources``` directory:
 
 ```bash
 cat << EOF > src/main/resources/local.maven-bench.properties
 maven.version.from=head
 maven.version.to=head
 EOF
-mvn clean package
+make build
 ```
 
+Then just make sure to have run **only once** ```make configure``` before opening your IDE or running your test.
 
+_NOTE: we need to do that because we don't support programmatically in JAVA with JUNIT the download and build head version of maven via a git clone repository._
 
 # Benchmark heap allocation of several Maven releases
 
