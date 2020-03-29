@@ -11,7 +11,10 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
+import org.quickperf.maven.bench.archivers.ZipArchive;
 import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
+import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.quickperf.repository.LongFileRepository;
@@ -47,7 +50,8 @@ public class MvnValidateAllocationByMaven3VersionTest {
 
         private final TestingProject projectUnderTest = new TestingProject(
                 BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
-                "https://github.com/apache/camel/archive/camel-2.23.4.zip"
+                "https://github.com/apache/camel/archive/camel-2.23.4.zip",
+                new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance())
         );
 
         private Verifier verifier;
@@ -67,7 +71,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
             if (projectUnderTest.isNotAlreadyInstalled()) {
                 try {
                     projectUnderTest.installProject();
-                } catch (IOException mavenProjectUnderTestNotInstallEx) {
+                } catch (IllegalStateException mavenProjectUnderTestNotInstallEx) {
                     throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
                 }
             }
@@ -107,9 +111,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         List<Maven3Version> maven3VersionsToMeasure = BenchProperties.INSTANCE.getMaven3VersionsToMeasure();
         for (Maven3Version maven3Version : maven3VersionsToMeasure) {
 
-            if(!maven3Version.alreadyDownloaded()) {
-                maven3Version.download();
-            }
+            maven3Version.installMavenIfNotExists();
 
             saveMavenVersion(maven3Version);
 

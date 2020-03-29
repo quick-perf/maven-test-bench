@@ -63,6 +63,17 @@
             <version>4.0.0</version>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>5.7.0.202003110725-r</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-model-builder -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model-builder</artifactId>
+            <version>3.6.3</version>
+        </dependency>
+        <dependency>
             <!-- To avoid "SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
              with oshi-core
             -->
