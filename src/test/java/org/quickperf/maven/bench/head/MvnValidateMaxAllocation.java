@@ -10,7 +10,10 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
 import org.quickperf.jvm.annotations.HeapSize;
+import org.quickperf.maven.bench.archivers.ZipArchive;
 import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
+import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 
@@ -25,7 +28,8 @@ public class MvnValidateMaxAllocation {
 
 		private final TestingProject apacheCamelProject = new TestingProject(
 				BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
-				"https://github.com/apache/camel/archive/camel-2.23.4.zip"
+				"https://github.com/apache/camel/archive/camel-2.23.4.zip",
+				new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance())
 		);
 
 		private Verifier verifier;
@@ -36,12 +40,13 @@ public class MvnValidateMaxAllocation {
 
 		@Before
 		public void before() throws VerificationException {
+			CURRENT_MAVEN_HEAD.installMavenIfNotExists();
 			System.setProperty("verifier.forkMode", "auto"); // embedded
 			System.setProperty("maven.home", CURRENT_MAVEN_HEAD.getMavenPath());
 			if (apacheCamelProject.isNotAlreadyInstalled()) {
 				try {
 					apacheCamelProject.installProject();
-				} catch (IOException mavenProjectUnderTestNotInstallEx) {
+				} catch (IllegalStateException mavenProjectUnderTestNotInstallEx) {
 					throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
 				}
 			}

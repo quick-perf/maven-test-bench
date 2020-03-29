@@ -9,6 +9,10 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.ProfileJvm;
+import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
+import org.quickperf.maven.bench.archivers.ZipArchive;
+import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
+import org.quickperf.maven.bench.projects.TestingProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.quickperf.maven.bench.config.BenchProperties;
@@ -25,7 +29,12 @@ public class MvnValidateProfilingTest {
 
     public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_2_5;
 
-    private final String pathOfMavenProjectUnderTest = BenchProperties.INSTANCE.getPathOfProjectUnderTest();
+    private final TestingProject apacheCamelProject = new TestingProject(
+            BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
+            "https://github.com/apache/camel/archive/camel-2.23.4.zip",
+            new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance())
+    );
+
 
     private Verifier verifier;
 
@@ -41,22 +50,30 @@ public class MvnValidateProfilingTest {
     }
 
     @Before
-    public void before() throws IOException, VerificationException {
-
-        System.out.println(MAVEN_3_VERSION);
-
-        if(!MAVEN_3_VERSION.alreadyDownloaded()) {
-            MAVEN_3_VERSION.download();
+    public void before() throws VerificationException {
+        if (apacheCamelProject.isNotAlreadyInstalled()) {
+            try {
+                apacheCamelProject.installProject();
+            } catch (IllegalStateException mavenProjectUnderTestNotInstallEx) {
+                throw new IllegalStateException(mavenProjectUnderTestNotInstallEx);
+            }
         }
 
+//        final Archive archiver = new ZipArchive();
+//        final Installer mavenInstaller = new InstallerImpl(HttpGetDownloader.getInstance(), archiver);
+//        final Path tPath = Paths.get(MAVEN_3_VERSION.getMavenPath());
+//        final String parentPath = tPath.getParent().toFile().getAbsolutePath();
+//
+//        mavenInstaller.install(MAVEN_3_VERSION.getUrlAsString(), parentPath);
+
+        // MAVEN_3_VERSION.installMavenIfNotExists();
+
         String mavenPath = MAVEN_3_VERSION.getMavenPath();
-
         System.setProperty("verifier.forkMode", "auto"); // embedded
-
         System.setProperty("maven.home", mavenPath);
 
-        verifier = new Verifier(pathOfMavenProjectUnderTest);
-        verifier.setSystemProperty("maven.multiModuleProjectDirectory", pathOfMavenProjectUnderTest);
+        verifier = new Verifier(apacheCamelProject.getPath());
+        verifier.setSystemProperty("maven.multiModuleProjectDirectory", apacheCamelProject.getPath());
 
     }
 
