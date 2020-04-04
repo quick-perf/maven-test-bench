@@ -11,10 +11,8 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
-import org.quickperf.maven.bench.archivers.ZipArchive;
 import org.quickperf.maven.bench.config.BenchProperties;
-import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
-import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
+import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.quickperf.repository.LongFileRepository;
@@ -48,11 +46,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         private static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
-        private final TestingProject projectUnderTest = new TestingProject(
-                BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
-                "https://github.com/apache/camel/archive/camel-2.23.4.zip",
-                new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance())
-        );
+        private final TestingProject projectUnderTest = BenchProperties.INSTANCE.getTestingProject();
 
         private Verifier verifier;
 
@@ -111,7 +105,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         List<Maven3Version> maven3VersionsToMeasure = BenchProperties.INSTANCE.getMaven3VersionsToMeasure();
         for (Maven3Version maven3Version : maven3VersionsToMeasure) {
 
-            maven3Version.installMavenIfNotExists();
+            new InstallMavenVersionIfNotExists(maven3Version).execute();
 
             saveMavenVersion(maven3Version);
 

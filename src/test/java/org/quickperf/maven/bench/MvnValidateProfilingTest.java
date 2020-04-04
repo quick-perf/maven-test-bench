@@ -9,16 +9,12 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.ProfileJvm;
-import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
-import org.quickperf.maven.bench.archivers.ZipArchive;
-import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.quickperf.maven.bench.config.BenchProperties;
 import org.quickperf.maven.bench.projects.Maven3Version;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,11 +25,7 @@ public class MvnValidateProfilingTest {
 
     public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_2_5;
 
-    private final TestingProject apacheCamelProject = new TestingProject(
-            BenchProperties.INSTANCE.getPathOfProjectUnderTest(),
-            "https://github.com/apache/camel/archive/camel-2.23.4.zip",
-            new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance())
-    );
+    private final TestingProject apacheCamelProject = BenchProperties.INSTANCE.getTestingProject();
 
 
     private Verifier verifier;

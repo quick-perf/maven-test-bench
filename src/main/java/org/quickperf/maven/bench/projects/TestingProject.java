@@ -1,32 +1,35 @@
 package org.quickperf.maven.bench.projects;
 
-import org.quickperf.maven.bench.Installer;
+import org.quickperf.maven.bench.Command;
+import org.quickperf.maven.bench.commands.GitClone;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class TestingProject {
 
-    private String path;
-    private final String downloadZipSource;
-    private final Installer installer;
+    private final String name;
+    private final String repository;
+    private final String version;
+    private final String targetPath;
 
-
-    public TestingProject(String projectPath, String downloadFrom, Installer installer) {
-        this.path = projectPath;
-        this.downloadZipSource = downloadFrom;
-        this.installer = installer;
+    public TestingProject(String name, String repository, String version, String targetPath) {
+        this.name = name;
+        this.repository = repository;
+        this.version = version;
+        this.targetPath = targetPath;
     }
 
     public boolean isNotAlreadyInstalled() {
-        return Files.notExists(Paths.get(this.path));
+        return Files.notExists(Paths.get(this.targetPath));
     }
 
     public String getPath() {
-        return path;
+        return targetPath;
     }
 
     public void installProject() {
-        installer.install(downloadZipSource, path);
+        final Command install = new GitClone(this.repository, this.targetPath, this.version);
+        install.execute();
     }
 }
