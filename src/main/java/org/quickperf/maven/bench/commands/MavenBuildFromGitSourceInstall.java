@@ -1,32 +1,31 @@
-package org.quickperf.maven.bench.installers;
+package org.quickperf.maven.bench.commands;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.quickperf.maven.bench.Archive;
-import org.quickperf.maven.bench.Downloader;
-import org.quickperf.maven.bench.Installer;
-import org.quickperf.maven.bench.archivers.ZipArchive;
+import org.quickperf.maven.bench.Command;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MavenBuildFromSourceInstaller implements Installer {
+public class MavenBuildFromGitSourceInstall implements Command {
+    private final String sourceUrl;
+    private final String targetPath;
+    private final String head;
 
-    private final Downloader downloader;
-    private final Archive zip = ZipArchive.getInstance();
-
-    public MavenBuildFromSourceInstaller(Downloader downloader) {
-        this.downloader = downloader;
+    public MavenBuildFromGitSourceInstall(String sourceUrl, String targetPath, String head) {
+        this.sourceUrl = sourceUrl;
+        this.targetPath = targetPath;
+        this.head = head;
     }
 
     @Override
-    public String install(String sourceUrl, String targetPath) {
+    public String execute() {
         final String targetDirectoryPath;
         try {
             final Path tempDirectory = Files.createTempDirectory("maven-test-bench");
-            targetDirectoryPath = downloader.download(sourceUrl, tempDirectory.toString());
+            targetDirectoryPath = new GitClone(sourceUrl, tempDirectory.toString(), head).execute();
         } catch (IOException e) {
             throw new IllegalStateException("Could not clone project " + sourceUrl + " into temporary directory", e);
         }
@@ -61,6 +60,6 @@ public class MavenBuildFromSourceInstaller implements Installer {
             throw new IllegalStateException("Cannot read pom version.", e);
         }
         System.out.println("unziping to " + apacheMavenBinDir);
-        return zip.unarchive(apacheMavenBinDir, targetPath);
+        return new ExtractZip(apacheMavenBinDir, targetPath).execute();
     }
 }

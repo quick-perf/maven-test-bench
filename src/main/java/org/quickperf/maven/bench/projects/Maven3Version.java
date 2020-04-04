@@ -1,12 +1,6 @@
 package org.quickperf.maven.bench.projects;
 
-import org.quickperf.maven.bench.Installer;
-import org.quickperf.maven.bench.archivers.ZipArchive;
 import org.quickperf.maven.bench.config.BenchProperties;
-import org.quickperf.maven.bench.downloaders.GitCloneDownloader;
-import org.quickperf.maven.bench.downloaders.HttpGetDownloader;
-import org.quickperf.maven.bench.installers.DownloadAndExtractInstaller;
-import org.quickperf.maven.bench.installers.MavenBuildFromSourceInstaller;
 
 import java.io.File;
 
@@ -35,27 +29,12 @@ public enum Maven3Version {
 
     private final String numVersion;
     private final String urlAsString;
-    private final Installer installer;
+    private final InstallProcess installProcess;
 
     Maven3Version(String numVersion, String urlPattern) {
         this.numVersion = numVersion;
         this.urlAsString = String.format(urlPattern, numVersion, numVersion);
-        Installer installer = null;
-        switch (urlPattern) {
-            case UrlPatterns.HTTP_RELEASE_DOWNLOAD:
-                installer = new DownloadAndExtractInstaller(HttpGetDownloader.getInstance(), ZipArchive.getInstance());
-                break;
-            case UrlPatterns.HTTP_GIT_REPO:
-                installer = new MavenBuildFromSourceInstaller(GitCloneDownloader.getInstance());
-                break;
-        }
-        this.installer = installer;
-    }
-
-    public boolean alreadyDownloaded() {
-        String mavenFilePath = getMavenPath();
-        File mavenZip = new File(mavenFilePath);
-        return mavenZip.exists();
+        this.installProcess = InstallProcess.parse(urlPattern);
     }
 
     public String getMavenPath() {
@@ -63,62 +42,40 @@ public enum Maven3Version {
         return mavenBinariesPath + File.separator + "apache-maven-" + numVersion;
     }
 
-    public void installMavenIfNotExists() {
-        if (!alreadyDownloaded()) {
-            installer.install(urlAsString, getMavenPath());
-        }
+    public String getUrlAsString() {
+        return urlAsString;
     }
-
-//    public void download() throws IOException {
-//        downloadMavenZip();
-//        unzipMavenZip();
-//        deleteMavenZip();
-//    }
-//
-//    private void downloadMavenZip() throws IOException {
-//        URL url = new URL(urlAsString);
-//        ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-//        String mavenZipFilePath = findMavenZipFilePath();
-//        File mavenDownloadDir = new File(BenchProperties.INSTANCE.getMavenBinariesPath());
-//        if(!mavenDownloadDir.exists()) {
-//            mavenDownloadDir.mkdir();
-//        }
-//        FileOutputStream fileOutputStream = new FileOutputStream(mavenZipFilePath);
-//        FileChannel fileChannel = fileOutputStream.getChannel();
-//        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-//        fileOutputStream.close();
-//        readableByteChannel.close();
-//    }
-//
-//    private String findMavenZipFilePath() {
-//        String mavenBinariesPath = BenchProperties.INSTANCE.getMavenBinariesPath();
-//        return mavenBinariesPath + File.separator + "apache-maven-" + numVersion + "-bin.zip";
-//    }
-//
-//    private void unzipMavenZip() throws ZipException {
-//        String mavenZipFilePath = findMavenZipFilePath();
-//        ZipFile zipFile = new ZipFile(mavenZipFilePath);
-//        String mavenBinariesPath = BenchProperties.INSTANCE.getMavenBinariesPath();
-//        zipFile.extractAll(mavenBinariesPath);
-//    }
-//
-//    private void deleteMavenZip() {
-//        String mavenZipFilePath = findMavenZipFilePath();
-//        File mavenZip = new File(mavenZipFilePath);
-//        mavenZip.delete();
-//    }
 
     public String getNumVersion() {
         return numVersion;
     }
 
-    public String getUrlAsString() {
-        return urlAsString;
+    public InstallProcess getInstallProcess() {
+        return installProcess;
     }
 
     @Override
     public String toString() {
         return "Maven" + " " + numVersion;
+    }
+
+    public enum InstallProcess {
+        GIT,
+        HTTP;
+
+        public static InstallProcess parse(String urlPattern) {
+            final InstallProcess installProcess;
+            switch (urlPattern) {
+                case UrlPatterns.HTTP_GIT_REPO:
+                    installProcess = GIT;
+                    break;
+                case UrlPatterns.HTTP_RELEASE_DOWNLOAD:
+                default:
+                    installProcess = HTTP;
+                    break;
+            }
+            return installProcess;
+        }
     }
     
     private static class UrlPatterns {

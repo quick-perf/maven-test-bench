@@ -1,8 +1,8 @@
-package org.quickperf.maven.bench.archivers;
+package org.quickperf.maven.bench.commands;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
-import org.quickperf.maven.bench.Archive;
+import org.quickperf.maven.bench.Command;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,18 +10,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ZipArchive implements Archive {
+public class ExtractZip implements Command {
+    private final String sourceZipFilePath;
+    private final String targetDirectoryPath;
 
-    private static final ZipArchive INSTANCE = new ZipArchive();
-
-    public static ZipArchive getInstance() {
-        return INSTANCE;
+    public ExtractZip(String sourceZipFilePath, String targetDirectoryPath){
+        this.sourceZipFilePath = sourceZipFilePath;
+        this.targetDirectoryPath = targetDirectoryPath;
     }
 
-    private ZipArchive(){}
-
     @Override
-    public String unarchive(String sourceZipFilePath, String targetDirectoryPath) {
+    public String execute() {
         final ZipFile zipFile = new ZipFile(sourceZipFilePath);
         try {
             final FileHeader rootFileHeader = zipFile.getFileHeaders().get(0);

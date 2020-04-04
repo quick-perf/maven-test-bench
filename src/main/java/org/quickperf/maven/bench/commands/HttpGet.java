@@ -1,6 +1,6 @@
-package org.quickperf.maven.bench.downloaders;
+package org.quickperf.maven.bench.commands;
 
-import org.quickperf.maven.bench.Downloader;
+import org.quickperf.maven.bench.Command;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,24 +11,24 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
-public class HttpGetDownloader implements Downloader {
+public class HttpGet implements Command {
 
-    private static final HttpGetDownloader INSTANCE = new HttpGetDownloader();
+    private final String targetPath;
+    private final String sourceUrl;
 
-    private HttpGetDownloader(){}
-
-    public static HttpGetDownloader getInstance() {
-        return INSTANCE;
+    public HttpGet(String targetPath, String sourceUrl) {
+        this.targetPath = targetPath;
+        this.sourceUrl = sourceUrl;
     }
 
     @Override
-    public String download(String sourceUrlAsString, String targetPath) {
+    public String execute() {
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
             downloadDir.mkdir();
         }
 
-        URL url = buildURL(sourceUrlAsString);
+        URL url = buildURL(sourceUrl);
         String fileName = getDirectoryNameFromUrl(url);
         final String downloadedFilePath = String.format("%s/%s", targetPath, fileName);
         try (

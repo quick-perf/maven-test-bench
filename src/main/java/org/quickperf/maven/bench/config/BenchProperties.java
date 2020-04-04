@@ -1,10 +1,8 @@
 package org.quickperf.maven.bench.config;
 
 import org.quickperf.maven.bench.projects.Maven3Version;
+import org.quickperf.maven.bench.projects.TestingProject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.*;
 
 public class BenchProperties {
@@ -23,26 +21,25 @@ public class BenchProperties {
 
     private String mavenBinariesPath;
 
-    private String projectUnderTest;
+    private TestingProject testingProject;
 
     private List<Maven3Version> maven3VersionsToMeasure;
 
     private void initializeProperties() {
         BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver();
-
         String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
         this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
-
         String numberOfWarnsAsString = properties.getProperty("warmup.number");
         this.numberOfWarns = Integer.parseInt(numberOfWarnsAsString);
-
         this.mavenBinariesPath = properties.getProperty("maven.binaries.path");
-
-        this.projectUnderTest = properties.getProperty("testing.project.path");
-
         this.exportPathOfMeasures = properties.getProperty("measures.export.path");
-
         this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
+
+        this.testingProject = new TestingProject(
+                properties.getProperty("testing.project.name"),
+                properties.getProperty("testing.project.repository"),
+                properties.getProperty("testing.project.version"),
+                properties.getProperty("testing.project.path"));
 
     }
 
@@ -97,12 +94,11 @@ public class BenchProperties {
         return mavenBinariesPath;
     }
 
-    public String getPathOfProjectUnderTest() {
-        return projectUnderTest;
+    public TestingProject getTestingProject() {
+        return testingProject;
     }
 
     public List<Maven3Version> getMaven3VersionsToMeasure() {
         return maven3VersionsToMeasure;
     }
-
 }
