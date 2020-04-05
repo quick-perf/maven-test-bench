@@ -16,12 +16,12 @@ import java.nio.channels.ReadableByteChannel;
 public class HttpGet implements Command {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpGet.class);
 
-    private final String targetPath;
     private final String sourceUrl;
+    private final String targetPath;
 
-    public HttpGet(String targetPath, String sourceUrl) {
-        this.targetPath = targetPath;
+    public HttpGet(String sourceUrl, String targetPath) {
         this.sourceUrl = sourceUrl;
+        this.targetPath = targetPath;
     }
 
     @Override
