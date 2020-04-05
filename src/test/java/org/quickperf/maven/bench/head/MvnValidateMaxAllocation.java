@@ -49,9 +49,9 @@ public class MvnValidateMaxAllocation {
 			verifier.setSystemProperty("maven.multiModuleProjectDirectory", projectDirectoryPath);
 		}
 
+		@Test
 		@HeapSize(value = 1, unit = AllocationUnit.GIGA_BYTE)
 		@ExpectMaxHeapAllocation(value = 3.75, unit = AllocationUnit.GIGA_BYTE)
-		@Test
 		public void execute_maven_validate() throws VerificationException {
 			verifier.executeGoals(validate);
 		}
