@@ -34,6 +34,10 @@ The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`
  
 The measures shown here are done against the Apache Camel project because it contains more than 800 Maven modules: such a huge build is perfect to get significant measures. But you can choose your own target.
 
+_Note: currently, every day, a job @TravisCI run `org.quickperf.maven.bench.head.MvnValidateMaxAllocation` in order to watch over Apache Maven project and observe 
+if new features on Apache Maven needs more memory then yesterday._  
+
+
 For reproducibility of our measures, a precisely defined commit of this project was chosen:
 ```
 git clone -n https://github.com/apache/camel.git
@@ -59,13 +63,20 @@ make build
 ```
 
 The above commandline will run behind the scene several actions:
-* clone Apache Camel project (commit ```c409ab7aabb971065fc8384a861904d2a2819be5```)
-* clone Apache Maven project on head commit,
-* build from source Apache Maven latest development version,
-* rename the built maven to ```apache-maven-head```, 
 * run ```mvn package -B```
 
-_Note: the build above could be stuck depending on your machine settings. If it is the case, I would suggest you to create a custom build (see below)._
+During the test phase, we are going to :
+* clone Apache Camel project (commit ```c409ab7aabb971065fc8384a861904d2a2819be5```) into ```test-classes/camel```
+* install different version of maven into ```test-classes/maven```
+    * for Releases version, we are going to :
+        * download releases from ```https://archive.apache.org/dist/maven/maven-3/<version>/binaries/apache-maven-<version>-bin.zip```
+        * unzip into ```test-classes/maven/apache-maven-<version>```
+    * for HEAD version, we are going to :
+        * clone Apache Maven mainstream from ```https://gitbox.apache.org/repos/asf/maven-sources.git```
+        * build from source Apache Maven latest development version,
+        * rename the built maven to ```test-classes/maven/apache-maven-master```, 
+
+__*Note:*__ *the build above could be stuck depending on your machine settings. If it is the case, I would suggest you to create a custom build (see below).*
 
 ## Custom Build
 
@@ -94,6 +105,32 @@ EOF
 make build
 ```
 
+### Running only some tests
+
+This project contains a Makefile to easily orchestrate how to build or run specific test. 
+To get more info, do not hesitate to run basic ```make``` or ```make help```:
+
+```bash
+$ make 
+build                          Build project with running all tests (basically run `mvn package`)
+clean                          Cleanup project files (basically run `mvn clean`)
+runMeasures                    Running only measures
+runValidateMaxAllocation       Running only memory allocation needed for last commit from Maven GIT Repository on master branch
+```
+
+#### Memory allocation on head maven version
+
+```bash
+$ make runValidateMaxAllocation
+```
+
+
+#### Measures maven version
+
+```bash
+$ make runMeasureOnHead
+```
+
 
 ## Developing
 
@@ -113,9 +150,8 @@ EOF
 make build
 ```
 
-Then just make sure to have run **only once** ```make configure``` before opening your IDE or running your test.
+Then just open your favorite IDE or running your test.
 
-_NOTE: we need to do that because we don't support programmatically in JAVA with JUNIT the download and build head version of maven via a git clone repository._
 
 # Benchmark heap allocation of several Maven releases
 

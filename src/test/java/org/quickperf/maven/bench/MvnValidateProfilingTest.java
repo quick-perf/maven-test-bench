@@ -9,6 +9,7 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.ProfileJvm;
+import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,14 +52,7 @@ public class MvnValidateProfilingTest {
             }
         }
 
-//        final Archive archiver = new ZipArchive();
-//        final Installer mavenInstaller = new InstallerImpl(HttpGetDownloader.getInstance(), archiver);
-//        final Path tPath = Paths.get(MAVEN_3_VERSION.getMavenPath());
-//        final String parentPath = tPath.getParent().toFile().getAbsolutePath();
-//
-//        mavenInstaller.install(MAVEN_3_VERSION.getUrlAsString(), parentPath);
-
-        // MAVEN_3_VERSION.installMavenIfNotExists();
+        new InstallMavenVersionIfNotExists(MAVEN_3_VERSION).execute();
 
         String mavenPath = MAVEN_3_VERSION.getMavenPath();
         System.setProperty("verifier.forkMode", "auto"); // embedded
@@ -66,7 +60,6 @@ public class MvnValidateProfilingTest {
 
         verifier = new Verifier(apacheCamelProject.getPath());
         verifier.setSystemProperty("maven.multiModuleProjectDirectory", apacheCamelProject.getPath());
-
     }
 
 }
