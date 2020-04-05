@@ -36,12 +36,12 @@ public class MavenBuildFromGitSourceInstall implements Command {
         }
 
         try {
-            LOGGER.debug("Running 'mvn clean package -DskipTest' for building project");
+            LOGGER.debug("Running 'mvn clean package -DskipTest' for building Apache Maven project");
             final Process process = Runtime.getRuntime().exec("mvn clean package -DskipTests -f " + targetDirectoryPath + "/pom.xml");
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
-                LOGGER.debug(line);
+                LOGGER.trace(line);
             }
             input.close();
 
