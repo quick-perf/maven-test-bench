@@ -3,10 +3,13 @@ package org.quickperf.maven.bench.commands;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.quickperf.maven.bench.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
 
 public class GitClone implements Command {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitClone.class);
 
     private final String sourceCloneUri;
     private final String targetPath;
@@ -21,11 +24,13 @@ public class GitClone implements Command {
     @Override
     public String execute() {
         try {
-            Git.cloneRepository()
+            LOGGER.info("Cloning {} into {}", sourceCloneUri, targetPath);
+            final Git gitRepository = Git.cloneRepository()
                 .setURI(sourceCloneUri)
                 .setDirectory(Paths.get(targetPath).toFile())
-                .setBranch(checkoutBranch)
                 .call();
+            LOGGER.info("Checking out {} commit", checkoutBranch);
+            gitRepository.checkout().setName(checkoutBranch).call();
         } catch (GitAPIException e) {
             throw new IllegalStateException("Could not clone " + sourceCloneUri + " repository.", e);
         }
