@@ -13,7 +13,9 @@ class DefaultBenchPropertiesResolver implements BenchPropertiesResolver {
 
     DefaultBenchPropertiesResolver() {
         resolvers.add(key -> {
-            final String name = key.toUpperCase().replace('.', '_');
+            final String name = key.toUpperCase()
+                    .replace('.', '_')
+                    .replace('-', '_');
             return System.getenv(name);
         });
         addBenchPropertiesFromFile(resolvers, "local." + CONFIG_FILENAME);
