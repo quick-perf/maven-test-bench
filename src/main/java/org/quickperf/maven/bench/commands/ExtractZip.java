@@ -3,6 +3,8 @@ package org.quickperf.maven.bench.commands;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.quickperf.maven.bench.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ExtractZip implements Command {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ExtractZip.class);
     private final String sourceZipFilePath;
     private final String targetDirectoryPath;
 
@@ -21,6 +24,7 @@ public class ExtractZip implements Command {
 
     @Override
     public String execute() {
+        LOGGER.info("Extracting {} into {}", sourceZipFilePath, targetDirectoryPath);
         final ZipFile zipFile = new ZipFile(sourceZipFilePath);
         try {
             final FileHeader rootFileHeader = zipFile.getFileHeaders().get(0);

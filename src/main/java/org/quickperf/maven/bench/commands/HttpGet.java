@@ -1,6 +1,8 @@
 package org.quickperf.maven.bench.commands;
 
 import org.quickperf.maven.bench.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +14,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
 public class HttpGet implements Command {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpGet.class);
 
     private final String targetPath;
     private final String sourceUrl;
@@ -23,6 +26,7 @@ public class HttpGet implements Command {
 
     @Override
     public String execute() {
+        LOGGER.info("Downloading to {} from HTTP GET {}", targetPath, sourceUrl);
         File downloadDir = new File(targetPath);
         if(!downloadDir.exists()) {
             downloadDir.mkdir();

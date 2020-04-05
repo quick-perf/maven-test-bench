@@ -4,12 +4,16 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.quickperf.maven.bench.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class MavenBuildFromGitSourceInstall implements Command {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenBuildFromGitSourceInstall.class);
+
     private final String sourceUrl;
     private final String targetPath;
     private final String head;
@@ -22,6 +26,7 @@ public class MavenBuildFromGitSourceInstall implements Command {
 
     @Override
     public String execute() {
+        LOGGER.info("Install Apache Maven project from GIT source code {} into {}", sourceUrl, targetPath);
         final String targetDirectoryPath;
         try {
             final Path tempDirectory = Files.createTempDirectory("maven-test-bench");
@@ -31,11 +36,12 @@ public class MavenBuildFromGitSourceInstall implements Command {
         }
 
         try {
+            LOGGER.debug("Running 'mvn clean package -DskipTest' for building project");
             final Process process = Runtime.getRuntime().exec("mvn clean package -DskipTests -f " + targetDirectoryPath + "/pom.xml");
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
-                System.out.println(line);
+                LOGGER.debug(line);
             }
             input.close();
 
@@ -50,16 +56,15 @@ public class MavenBuildFromGitSourceInstall implements Command {
 
         final String pomXmlFile = targetDirectoryPath + "/pom.xml";
         final String apacheMavenBinDir;
+        LOGGER.trace("Getting project version from pom project.");
         try (final Reader reader = new FileReader(pomXmlFile)){
             final MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
             final Model model = xpp3Reader.read(reader);
-            System.out.println(model.getVersion());
             final String apacheMavenVersion = model.getVersion();
             apacheMavenBinDir = targetDirectoryPath + "/apache-maven/target/apache-maven-" + apacheMavenVersion + "-bin.zip";
         } catch (final IOException | XmlPullParserException e) {
             throw new IllegalStateException("Cannot read pom version.", e);
         }
-        System.out.println("unziping to " + apacheMavenBinDir);
         return new ExtractZip(apacheMavenBinDir, targetPath).execute();
     }
 }

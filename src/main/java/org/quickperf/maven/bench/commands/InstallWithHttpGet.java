@@ -1,6 +1,8 @@
 package org.quickperf.maven.bench.commands;
 
 import org.quickperf.maven.bench.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InstallWithHttpGet implements Command {
     private String sourceUrl;
