@@ -1,17 +1,18 @@
 SHELL := /bin/bash # Use bash syntax
 
-.PHONY: runMeasureOnHead runTestNonRegMvn
+.PHONY: help build runMeasures runValidateMaxAllocation
 
-clean:
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+clean: 						## Cleanup project files (basically run `mvn clean`)
 	mvn clean
 
-build:
+build: 						## Build project with running all tests (basically run `mvn package`)
 	mvn package -B
 
-runTestNonRegMvn:
+runValidateMaxAllocation: 	## Running only memory allocation needed for last commit from Maven GIT Repository on master branch
 	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
 
-runMeasureOnHead:
-	@echo "maven.version.from=head" > src/test/resources/local.maven-bench.properties
-	@echo "maven.version.to=head" >> src/test/resources/local.maven-bench.properties
+runMeasures:				## Running only measures
 	mvn test -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
