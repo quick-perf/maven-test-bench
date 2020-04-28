@@ -1,6 +1,6 @@
 <div align="center">
 <blockquote>
-<p><h3>This project is a test bench to measure and investigate heap allocation of Apache Maven.</h3></p>
+<p><h2>Measure and investigate heap memory allocation of Apache Maven</h2></p>
 </blockquote>
 </div>
 
@@ -15,36 +15,36 @@
   <a href="#License">License</a> 
 </p>
 
-At this moment, this project is a test bench based on [QuickPerf](https://github.com/quick-perf/quickperf) to benchmark and understand heap allocation caused by `mvn validate` (the first phase before launching any plugin: see [Lifecycles Reference](https://maven.apache.org/ref/current/maven-core/lifecycles.html)).
+This project is a test bench based on [QuickPerf](https://github.com/quick-perf/quickperf) to benchmark and understand heap memory allocation caused by `mvn validate` on a project source code.
 
-Measures have been done with Apache Camel source code as a target project to execute Maven.
+Feel free to use this project re-execute measures, play with it on measuring any build, tweak its code and contribute back to it!
 
-Feel free to use this project and contribute to it!
+# Overview
+
+This project contains two types of measures against Maven build execution, each provided as a JUnit unit test (in ```src/test/java```):
+- `MvnValidateProfilingTest` can be used to investigate the origin of memory allocation (using QuickPerf [@ProfileJvm](https://github.com/quick-perf/doc/wiki/JVM-annotations#Profile-or-check-your-JVM)) during one build with a given Maven version,
+- `MvnValidateAllocationByMaven3VersionTest` can be used to measure the heap allocation (using QuickPerf [@MeasureHeapAllocation](https://github.com/quick-perf/doc/wiki/JVM-annotations#Verify-heap-allocation)) for every Maven release in a version range.
 
 # General setup
 
-This project contains two types of test:
-- `MvnValidateAllocationByMaven3VersionTest` can be used to evaluate the heap allocation level for a range of Maven versions,
-- for a given Maven version, `MvnValidateProfilingTest` can be used to investigate the origin of allocation.
+This general setup part describes configuration common to both tests, done in `src/test/resourrces/maven-bench.properties` file:
+- the `project-under-test.path` represents the path of the project on which `mvn validate` will be applied,
+- the `maven.binaries.path` property corresponds to the path where the needed Maven distributions will be automatically downloaded by the tests.
+The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`.
+ 
+The measures shown here are done against the Apache Camel project because it contains more than 800 Maven modules: such a huge build is perfect to get significant measures. But you can choose your own target.
 
-This general setup part describes configurations common to both tests.
-
-You have to define values to the `project-under-test.path` and `maven.binaries.path` properties contained in the `maven-bench.properties` file. The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`.
-
-The `project-under-test.path` represents the path of the project on which `mvn validate` will be applied. 
-Our next measures are based on the Apache Camel project, but you can choose your own target. For reproducibility of our measure, a precisely defined version of this project was chosen:
+For reproducibility of our measures, a precisely defined commit of this project was chosen:
 ```
 git clone -n https://github.com/apache/camel.git
 git checkout c409ab7aabb971065fc8384a861904d2a2819be5
 ```
-This Apache Camel version contains 841 modules: such a huge build is perfect to get significant measures.
 
-The `maven.binaries.path` property corresponds to the path where the needed Maven distributions will be automatically downloaded by the tests. Downloads are performed during *@Before* execution.
-If you want to apply measures on Maven HEAD, you can execute the following commands where {maven-distrib-location} has to be replaced with the url given by the `maven.binaries.path` property of `maven-bench.properties` file:
+If you want to apply measures on build done with Maven HEAD, that cannot be downloaded from public releases, you can execute the following commands where {maven-distrib-location} has to be replaced with the url given by the `maven.binaries.path` property of `maven-bench.properties` file:
 ```
 git clone https://github.com/apache/maven.git
 cd maven
-mvn -DdistributionTargetDir="{maven-distrib-location}/apache-maven-head" clean package
+mvn -DdistributionTargetDir="{maven-distrib-location}/apache-maven-head" package
 ``` 
 
 Heap size is fixed with the help of [@HeapSize](https://github.com/quick-perf/doc/wiki/JVM-annotations#heapsize).
