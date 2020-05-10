@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
-import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.maven.bench.config.BenchProperties;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.Maven3Version;
