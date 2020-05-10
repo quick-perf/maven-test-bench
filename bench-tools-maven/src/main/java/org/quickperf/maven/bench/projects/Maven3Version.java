@@ -1,6 +1,6 @@
 package org.quickperf.maven.bench.projects;
 
-import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 
 import java.io.File;
 
@@ -38,7 +38,7 @@ public enum Maven3Version {
     }
 
     public String getMavenPath() {
-        String mavenBinariesPath = BenchProperties.INSTANCE.getMavenBinariesPath();
+        String mavenBinariesPath = BenchConfiguration.INSTANCE.getMavenBinariesPath();
         return mavenBinariesPath + File.separator + "apache-maven-" + numVersion;
     }
 

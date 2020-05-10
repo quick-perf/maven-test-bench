@@ -1,6 +1,6 @@
 package org.quickperf.maven.bench;
 
-import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -19,14 +19,14 @@ class ExecutionContextTextExporter {
 
     public void writeExecutionContextToTextFile(String dateTimeAsString) {
 
-        String filePath =  BenchProperties.INSTANCE.getExportPathOfMeasures()
+        String filePath =  BenchConfiguration.INSTANCE.getExportPathOfMeasures()
                          + File.separator
                          + "execution-context-" +dateTimeAsString + ".txt";
 
         try (FileWriter writer = new FileWriter(filePath);
              BufferedWriter bw = new BufferedWriter(writer)) {
 
-            int numberOfWarms = BenchProperties.INSTANCE.getNumberOfWarms();
+            int numberOfWarms = BenchConfiguration.INSTANCE.getNumberOfWarms();
             bw.write("Warm up: " + numberOfWarms);
 
             bw.newLine();

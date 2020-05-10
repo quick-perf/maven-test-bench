@@ -11,7 +11,7 @@ import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
-import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
@@ -46,7 +46,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
         private static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
-        private final TestingProject projectUnderTest = BenchProperties.INSTANCE.getTestingProject();
+        private final TestingProject projectUnderTest = BenchConfiguration.INSTANCE.getTestingProject();
 
         private Verifier verifier;
 
@@ -98,11 +98,11 @@ public class MvnValidateAllocationByMaven3VersionTest {
         String dateTimeAsString = getDateTimeAsString();
         String resultFilePath = buildAllocationCsvExportPath(dateTimeAsString);
 
-        int numberOfMeasuresByVersion = BenchProperties.INSTANCE.getNumberOfMeasuresByMavenVersion();
+        int numberOfMeasuresByVersion = BenchConfiguration.INSTANCE.getNumberOfMeasuresByMavenVersion();
 
         Class<?> testClass = MvnValidate.class;
 
-        List<Maven3Version> maven3VersionsToMeasure = BenchProperties.INSTANCE.getMaven3VersionsToMeasure();
+        List<Maven3Version> maven3VersionsToMeasure = BenchConfiguration.INSTANCE.getMaven3VersionsToMeasure();
         for (Maven3Version maven3Version : maven3VersionsToMeasure) {
 
             new InstallMavenVersionIfNotExists(maven3Version).execute();
@@ -134,7 +134,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
     }
 
     private void applyWarmMeasurements(Maven3Version maven3Version, Class<?> testClass) throws IOException {
-        int numberOfWarms = BenchProperties.INSTANCE.getNumberOfWarms();
+        int numberOfWarms = BenchConfiguration.INSTANCE.getNumberOfWarms();
         if(numberOfWarms != 0) {
             System.out.println(maven3Version + " - Start " + numberOfWarms + " warm up");
             System.out.println("-----------------------------");
@@ -145,7 +145,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
     }
 
     private String buildAllocationCsvExportPath(String dateTimeAsString) throws IOException {
-        String measurementsExportPathName = BenchProperties.INSTANCE.getExportPathOfMeasures();
+        String measurementsExportPathName = BenchConfiguration.INSTANCE.getExportPathOfMeasures();
         final Path measurementsExportPath = Paths.get(measurementsExportPathName);
         if (Files.notExists(measurementsExportPath)) {
             Files.createDirectories(measurementsExportPath);

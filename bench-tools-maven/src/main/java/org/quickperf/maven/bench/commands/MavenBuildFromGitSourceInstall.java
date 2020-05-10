@@ -11,6 +11,18 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Command to run for building Maven from Source code.
+ *
+ * <p>
+ *     This command execute the following step:
+ *     <ul>
+ *         <li>git clone sourceUrl@head</li>
+ *         <li>mvn clean package -DskipTest</li>
+ *         <li>unzip APACHE_MAVEN_DIR/target/apache-maven-version-bin.zip targetPath</li>
+ *     </ul>
+ * </p>
+ */
 public class MavenBuildFromGitSourceInstall implements Command {
     private static final Logger LOGGER = LoggerFactory.getLogger(MavenBuildFromGitSourceInstall.class);
 

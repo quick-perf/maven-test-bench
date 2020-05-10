@@ -13,7 +13,7 @@ import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.projects.Maven3Version;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class MvnValidateProfilingTest {
 
     public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_2_5;
 
-    private final TestingProject apacheCamelProject = BenchProperties.INSTANCE.getTestingProject();
+    private final TestingProject apacheCamelProject = BenchConfiguration.INSTANCE.getTestingProject();
 
 
     private Verifier verifier;

@@ -5,12 +5,20 @@ import org.quickperf.maven.bench.projects.TestingProject;
 
 import java.util.*;
 
-public class BenchProperties {
+/**
+ * Benchmark configuration needed to run all bench tests on Apache Maven.
+ *
+ * <p>
+ *     The configuration are loaded using differents {@link BenchConfigurationResolver} configured uppon
+ *     {@link DefaultBenchConfigurationResolver}.
+ * </p>
+ */
+public class BenchConfiguration {
 
-    public static final BenchProperties INSTANCE = new BenchProperties();
+    public static final BenchConfiguration INSTANCE = new BenchConfiguration();
 
-    private BenchProperties() {
-        initializeProperties();
+    private BenchConfiguration() {
+        initialize();
     }
 
     private int numberOfMeasuresByMavenVersion;
@@ -25,25 +33,25 @@ public class BenchProperties {
 
     private List<Maven3Version> maven3VersionsToMeasure;
 
-    private void initializeProperties() {
-        BenchPropertiesResolver properties  = new DefaultBenchPropertiesResolver();
-        String numberOfMeasuresByMavenVersionAsString = properties.getProperty("measures.number-by-maven-version");
+    private void initialize() {
+        BenchConfigurationResolver properties  = new DefaultBenchConfigurationResolver();
+        String numberOfMeasuresByMavenVersionAsString = properties.resolve("measures.number-by-maven-version");
         this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
-        String numberOfWarnsAsString = properties.getProperty("warmup.number");
+        String numberOfWarnsAsString = properties.resolve("warmup.number");
         this.numberOfWarns = Integer.parseInt(numberOfWarnsAsString);
-        this.mavenBinariesPath = properties.getProperty("maven.binaries.path");
-        this.exportPathOfMeasures = properties.getProperty("measures.export.path");
+        this.mavenBinariesPath = properties.resolve("maven.binaries.path");
+        this.exportPathOfMeasures = properties.resolve("measures.export.path");
         this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
 
         this.testingProject = new TestingProject(
-                properties.getProperty("testing.project.name"),
-                properties.getProperty("testing.project.repository"),
-                properties.getProperty("testing.project.version"),
-                properties.getProperty("testing.project.path"));
+                properties.resolve("testing.project.name"),
+                properties.resolve("testing.project.repository"),
+                properties.resolve("testing.project.version"),
+                properties.resolve("testing.project.path"));
 
     }
 
-    private List<Maven3Version> findMaven3VersionsToMeasure(BenchPropertiesResolver properties) {
+    private List<Maven3Version> findMaven3VersionsToMeasure(BenchConfigurationResolver properties) {
 
         List<Maven3Version> maven3VersionsToMeasure = new ArrayList<>();
 
@@ -70,12 +78,12 @@ public class BenchProperties {
 
     }
 
-    private boolean isMaven3VersionFrom(Maven3Version maven3Version, BenchPropertiesResolver properties) {
-        return properties.getProperty("maven.version.from").equals(maven3Version.getNumVersion());
+    private boolean isMaven3VersionFrom(Maven3Version maven3Version, BenchConfigurationResolver properties) {
+        return properties.resolve("maven.version.from").equals(maven3Version.getNumVersion());
     }
 
-    private boolean isMaven3VersionTo(Maven3Version maven3Version, BenchPropertiesResolver properties) {
-        return properties.getProperty("maven.version.to").equals(maven3Version.getNumVersion());
+    private boolean isMaven3VersionTo(Maven3Version maven3Version, BenchConfigurationResolver properties) {
+        return properties.resolve("maven.version.to").equals(maven3Version.getNumVersion());
     }
 
     public int getNumberOfMeasuresByMavenVersion() {

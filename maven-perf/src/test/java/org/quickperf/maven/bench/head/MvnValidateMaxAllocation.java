@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
-import org.quickperf.maven.bench.config.BenchProperties;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
@@ -22,7 +22,7 @@ public class MvnValidateMaxAllocation {
 	@RunWith(QuickPerfJUnitRunner.class)
 	public static class MvnValidate {
 
-		private final TestingProject apacheCamelProject = BenchProperties.INSTANCE.getTestingProject();
+		private final TestingProject apacheCamelProject = BenchConfiguration.INSTANCE.getTestingProject();
 
 		private Verifier verifier;
 

@@ -7,16 +7,19 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
+/**
+ * Strategy to resolve all configuration from a properties file.
+ */
+class BenchConfigurationFileBasedResolver implements BenchConfigurationResolver {
     private Properties props;
 
-    private BenchPropertiesFileBasedResolver(String fileName) throws IOException {
+    private BenchConfigurationFileBasedResolver(String fileName) throws IOException {
         this.props = this.loadProperties(fileName);
     }
 
-    static BenchPropertiesFileBasedResolver createBenchPropertiesFileBasedResolver(String fileName)
+    static BenchConfigurationFileBasedResolver createBenchPropertiesFileBasedResolver(String fileName)
             throws IOException {
-        return new BenchPropertiesFileBasedResolver(fileName);
+        return new BenchConfigurationFileBasedResolver(fileName);
     }
 
     private Properties loadProperties(String fileName) throws IOException {
@@ -34,7 +37,7 @@ class BenchPropertiesFileBasedResolver implements BenchPropertiesResolver {
     }
 
     @Override
-    public String getProperty(String key) {
-        return props.getProperty(key);
+    public String resolve(String parameter) {
+        return props.getProperty(parameter);
     }
 }
