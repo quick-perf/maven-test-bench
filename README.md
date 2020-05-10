@@ -177,12 +177,12 @@ The benchmark results are exported into a `maven-memory-allocation-{date-time}.c
 
 For several Maven versions, the following graph gives the average of ten heap allocations caused by the application of `mvn validate` on Apache Camel:
 <p align="center">
-    <img src="measures/mvn-validate-on-camel.png">
+    <img src="maven-perf/measures/mvn-validate-on-camel.png">
 </p>
 
 For this graph, you can consult:
-* [the measures](measures/maven-memory-allocation-2019-09-01-18-48-41.csv)
-* [the execution context](measures/execution-context-2019-09-01-18-48-41.txt)
+* [the measures](maven-perf/measures/maven-memory-allocation-2019-09-01-18-48-41.csv)
+* [the execution context](maven-perf/measures/execution-context-2019-09-01-18-48-41.txt)
 
 Measures took around one hour and a quarter. 
 
@@ -215,7 +215,7 @@ You can open it with Java Mission Control (JMC) to discover the methods contribu
 
 Below a JFR file for Maven 3.2.5 and opened with JMC 5.5:
 <p align="center">
-    <img src="measures/Maven3.2.5-JMC.5.5JPG.jpg">
+    <img src="maven-perf/measures/Maven3.2.5-JMC.5.5JPG.jpg">
 </p>
 
 
