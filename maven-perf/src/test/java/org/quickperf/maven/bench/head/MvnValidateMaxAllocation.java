@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
+import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
 import org.quickperf.maven.bench.projects.Maven3Version;
@@ -49,6 +50,7 @@ public class MvnValidateMaxAllocation {
 		}
 
 		@Test
+		@HeapSize(value = 4, unit = AllocationUnit.GIGA_BYTE)
 		@ExpectMaxHeapAllocation(value = 3.75, unit = AllocationUnit.GIGA_BYTE)
 		public void execute_maven_validate() throws VerificationException {
 			verifier.executeGoals(validate);
