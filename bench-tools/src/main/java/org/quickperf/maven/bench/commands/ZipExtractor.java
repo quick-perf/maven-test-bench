@@ -23,12 +23,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ExtractZip implements Command {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ExtractZip.class);
+public class ZipExtractor implements Command {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ZipExtractor.class);
     private final String sourceZipFilePath;
     private final String targetDirectoryPath;
 
-    public ExtractZip(String sourceZipFilePath, String targetDirectoryPath){
+    public ZipExtractor(String sourceZipFilePath, String targetDirectoryPath){
         this.sourceZipFilePath = sourceZipFilePath;
         this.targetDirectoryPath = targetDirectoryPath;
     }

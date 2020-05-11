@@ -19,13 +19,11 @@ import java.nio.file.Paths;
 
 public class TestingProject {
 
-    private final String name;
     private final String repository;
     private final String version;
     private final String targetPath;
 
     public TestingProject(String name, String repository, String version, String targetPath) {
-        this.name = name;
         this.repository = repository;
         this.version = version;
         this.targetPath = targetPath;

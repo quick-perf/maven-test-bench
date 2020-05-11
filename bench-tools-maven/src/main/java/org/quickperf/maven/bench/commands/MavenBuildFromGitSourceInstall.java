@@ -76,6 +76,6 @@ public class MavenBuildFromGitSourceInstall implements Command {
         } catch (final IOException | XmlPullParserException e) {
             throw new IllegalStateException("Cannot read pom version.", e);
         }
-        return new ExtractZip(apacheMavenBinDir, targetPath).execute();
+        return new ZipExtractor(apacheMavenBinDir, targetPath).execute();
     }
 }

@@ -47,14 +47,14 @@ import static org.junit.experimental.results.PrintableResult.testResult;
 
 public class MvnValidateAllocationByMaven3VersionTest {
 	
-    private Logger logger = LoggerFactory.getLogger(MvnValidateAllocationByMaven3VersionTest.class);
+    private final Logger logger = LoggerFactory.getLogger(MvnValidateAllocationByMaven3VersionTest.class);
 
     @RunWith(QuickPerfJUnitRunner.class)
     public static class MvnValidate {
 
         private static final String TEMP_DIR_PATH = System.getProperty("java.io.tmpdir");
 
-        private static Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
+        private static final Maven3Version MAVEN_3_VERSION = (Maven3Version) ObjectFileRepository.INSTANCE
                 .find(TEMP_DIR_PATH, MvnValidateAllocationByMaven3VersionTest.MAVEN_3_VERSION_FILE_NAME);
 
         private final TestingProject projectUnderTest = BenchProperties.INSTANCE.getTestingProject();
@@ -187,7 +187,7 @@ public class MvnValidateAllocationByMaven3VersionTest {
             System.out.println("Allocation can't be measured. " + printableResult.toString());
         }
         Long allocationInBytes = retrieveMeasuredAllocationInBytes();
-        Long lengthInSeconds = executionTimeInMilliseconds/1000l;
+        Long lengthInSeconds = executionTimeInMilliseconds/1000L;
         System.out.println("Allocation in bytes: " + allocationInBytes);
         System.out.println("Length in seconds: " + lengthInSeconds);
         System.out.println("----------------");
