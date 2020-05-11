@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public class InstallMavenVersionIfNotExists implements Command {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(InstallMavenVersionIfNotExists.class);
+
     private final Maven3Version maven3Version;
 
     public InstallMavenVersionIfNotExists(Maven3Version maven3Version) {
