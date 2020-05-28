@@ -11,8 +11,11 @@ clean: 						## Cleanup project files (basically run `mvn clean`)
 build: 						## Build project with running all tests (basically run `mvn package`)
 	mvn package -B
 
-runValidateMaxAllocation: 	## Running only memory allocation needed for last commit from Maven GIT Repository on master branch
-	mvn test -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
+install-only-bench-tools: 	## Install locally all tools lib necessary to run maven perf tests.
+	mvn install -pl bench-tools-maven -am -B
 
-runMeasures:				## Running only measures
-	mvn test -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
+runValidateMaxAllocation: install-only-bench-tools	## Running only memory allocation needed for last commit from Maven GIT Repository on master branch
+	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
+
+runMeasures: install-only-bench-tools	## Running only measures
+	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B
