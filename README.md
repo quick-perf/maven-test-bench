@@ -28,11 +28,15 @@ This project contains two types of measures against Maven build execution, each 
 # General setup
 
 This general setup part describes configuration common to both tests, done in `src/test/resourrces/maven-bench.properties` file:
-- the `project-under-test.path` represents the path of the project on which `mvn validate` will be applied,
+- the `testing.project.path` represents the path of the project on which `mvn validate` will be applied,
 - the `maven.binaries.path` property corresponds to the path where the needed Maven distributions will be automatically downloaded by the tests.
 The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`.
  
 The measures shown here are done against the Apache Camel project because it contains more than 800 Maven modules: such a huge build is perfect to get significant measures. But you can choose your own target.
+
+_Note: currently, every day, a job @TravisCI run `org.quickperf.maven.bench.head.MvnValidateMaxAllocation` in order to watch over Apache Maven project and observe 
+if new features on Apache Maven needs more memory then yesterday._  
+
 
 For reproducibility of our measures, a precisely defined commit of this project was chosen:
 ```
@@ -49,9 +53,109 @@ mvn -DdistributionTargetDir="{maven-distrib-location}/apache-maven-head" package
 
 Heap size is fixed with the help of [@HeapSize](https://github.com/quick-perf/doc/wiki/JVM-annotations#heapsize).
 
+# Contributing
+
+## Building the project
+
+```bash
+git clone https://github.com/pcavezzan/maven-test-bench.git
+make build
+```
+
+The above commandline will run behind the scene several actions:
+* run ```mvn package -B```
+
+During the test phase, we are going to :
+* clone Apache Camel project (commit ```c409ab7aabb971065fc8384a861904d2a2819be5```) into ```test-classes/camel```
+* install different version of maven into ```test-classes/maven```
+    * for Releases version, we are going to :
+        * download releases from ```https://archive.apache.org/dist/maven/maven-3/<version>/binaries/apache-maven-<version>-bin.zip```
+        * unzip into ```test-classes/maven/apache-maven-<version>```
+    * for HEAD version, we are going to :
+        * clone Apache Maven mainstream from ```https://gitbox.apache.org/repos/asf/maven-sources.git```
+        * build from source Apache Maven latest development version,
+        * rename the built maven to ```test-classes/maven/apache-maven-master```, 
+
+__*Note:*__ *the build above could be stuck depending on your machine settings. If it is the case, I would suggest you to create a custom build (see below).*
+
+## Custom Build
+
+If you prefer to override some settings without editing the default configuration (```maven-bench.propertiers```), 
+you have several options:
+ 
+* environment variable
+* you can create a local configuration files ```local.maven-bench.properties``` without any risk to version it because 
+this file is ignored by GIT. In this file, just override the settings you want.
+
+### Overriding by setting environment variable
+
+```bash
+export MAVEN_VERSION_FROM=3.6.1
+export MAVEN_VERSION_TO=3.6.2
+make build
+```   
+
+### Overriding by creating local.maven-bench.properties
+
+```bash
+cat << EOF > src/main/resources/local.maven-bench.properties
+maven.version.from=3.6.1
+maven.version.to=3.6.2
+EOF
+make build
+```
+
+### Running only some tests
+
+This project contains a Makefile to easily orchestrate how to build or run specific test. 
+To get more info, do not hesitate to run basic ```make``` or ```make help```:
+
+```bash
+$ make 
+build                          Build project with running all tests (basically run `mvn package`)
+clean                          Cleanup project files (basically run `mvn clean`)
+runMeasures                    Running only measures
+runValidateMaxAllocation       Running only memory allocation needed for last commit from Maven GIT Repository on master branch
+```
+
+#### Memory allocation on head maven version
+
+```bash
+$ make runValidateMaxAllocation
+```
+
+
+#### Measures maven version
+
+```bash
+$ make runMeasureOnHead
+```
+
+
+## Developing
+
+If you want to help us and make some code, you can easily get the project and open it up with your favorite IDE.
+
+
+### NOTE: if you want to debug head version of Maven
+
+First configure the project to use only head version of maven. For example, by creating a ```local.maven-bench.properties``` 
+in ```src/main/resources``` directory:
+
+```bash
+cat << EOF > src/main/resources/local.maven-bench.properties
+maven.version.from=head
+maven.version.to=head
+EOF
+make build
+```
+
+Then just open your favorite IDE or running your test.
+
+
 # Benchmark heap allocation of several Maven releases
 
-`MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
+`org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest` test allows to benchmark the heap allocation level on several Maven 3 distributions.
 
 Heap allocation level is measured with the help of [@MeasureHeapAllocation](https://github.com/quick-perf/doc/wiki/JVM-annotations#Verify-heap-allocation) QuickPerf annotation. This annotation measures the heap allocation level of the thread running the method annotated with @Test.
 Feel free to contribute to QuickPerf by adding a feature allowing to measure the allocation level aggregated across all the threads! With `mvn validate`, we have checked that Maven code is not multithreaded during this validate phase by profiling the JVM with the help of [@ProfileJvm](https://github.com/quick-perf/doc/wiki/JVM-annotations#ProfileJvm).
@@ -66,19 +170,19 @@ You also have to give a value for the following properties contained in the [mav
 
 The meaning of these properties is given in the [maven-bench.properties](src/test/resources/maven-bench.properties) file.
 
-Measures can be launched with this command line: ```mvn -Dtest=MvnValidateAllocationByMaven3VersionTest test```.
+Measures can be launched with this command line: ```mvn -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest test```.
 Before doing it, you can close your IDE, web browser or other applications to free memory.
 
 The benchmark results are exported into a `maven-memory-allocation-{date-time}.csv` file. The execution context (processor, OS, ...) is reported in an `execution-context-{date-time}.txt` file.
 
 For several Maven versions, the following graph gives the average of ten heap allocations caused by the application of `mvn validate` on Apache Camel:
 <p align="center">
-    <img src="measures/mvn-validate-on-camel.png">
+    <img src="maven-perf/measures/mvn-validate-on-camel.png">
 </p>
 
 For this graph, you can consult:
-* [the measures](measures/maven-memory-allocation-2019-09-01-18-48-41.csv)
-* [the execution context](measures/execution-context-2019-09-01-18-48-41.txt)
+* [the measures](maven-perf/measures/maven-memory-allocation-2019-09-01-18-48-41.csv)
+* [the execution context](maven-perf/measures/execution-context-2019-09-01-18-48-41.txt)
 
 Measures took around one hour and a quarter. 
 
@@ -90,12 +194,12 @@ But where the allocation comes from? In the following part we will see how to sp
 
 # Investigate where heap allocation comes from
 
-You can use `MvnValidateProfilingTest` to understand the origin of heap allocation.
+You can use `org.quickperf.maven.bench.MvnValidateProfilingTest` to understand the origin of heap allocation.
 Some of the set up requirements can be found in [General setup](#General-setup) part.
 
 The Maven version under test can be set with the `MAVEN_3_VERSION` constant:
 ``` java
-    public static Maven3Version MAVEN_3_VERSION = Maven3Version.V_3_6_2;
+    public static org.quickperf.maven.bench.projects.Maven3Version MAVEN_3_VERSION = org.quickperf.maven.bench.projects.Maven3Version.V_3_6_2;
 ```
 
 A test method is annotated with [@ProfileJvm](https://github.com/quick-perf/doc/wiki/JVM-annotations#Profile-or-check-your-JVM) to profile the test method with Java Flight Recorder (JFR).
@@ -111,7 +215,7 @@ You can open it with Java Mission Control (JMC) to discover the methods contribu
 
 Below a JFR file for Maven 3.2.5 and opened with JMC 5.5:
 <p align="center">
-    <img src="measures/Maven3.2.5-JMC.5.5JPG.jpg">
+    <img src="maven-perf/measures/Maven3.2.5-JMC.5.5JPG.jpg">
 </p>
 
 
@@ -169,6 +273,15 @@ Many thanks to all our contributors!
             <br/>
             <a href="https://github.com/quick-perf/maven-test-bench/commits?author=albertotn" title="Code">💻</a>
         </td>
+        <td align="center">
+            <a href="https://github.com/pcavezzan">
+                <img src="https://avatars2.githubusercontent.com/u/3405916?v=4" width="100px;" alt="Patrice Cavezzan"/>
+                <br/>
+                <sub><b>Patrice Cavezzan</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/quick-perf/maven-test-bench/commits?author=pcavezzan" title="Code">💻</a>
+        </td>        
     </tr>
 </table>
 <a href = "https://allcontributors.org/docs/en/emoji-key">emoji key</a>
