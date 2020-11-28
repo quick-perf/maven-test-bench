@@ -19,13 +19,13 @@ import org.junit.runner.RunWith;
 import org.quickperf.junit4.QuickPerfJUnitRunner;
 import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.HeapSize;
-import org.quickperf.jvm.annotations.ProfileJvm;
+import org.quickperf.jvm.jfr.annotation.ProfileJvm;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
+import org.quickperf.maven.bench.config.BenchConfiguration;
+import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.quickperf.maven.bench.config.BenchConfiguration;
-import org.quickperf.maven.bench.projects.Maven3Version;
 
 import java.util.Collections;
 import java.util.List;
