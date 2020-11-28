@@ -1,6 +1,9 @@
 <div align="center">
 <blockquote>
-<p><h2>Measure and investigate heap memory allocation of Apache Maven</h2></p>
+<p>
+<h2>Measure and investigate heap memory allocation of Apache Maven</h2>
+<img src="https://travis-ci.com/quick-perf/maven-test-bench.svg?branch=master"></img>
+</p>
 </blockquote>
 </div>
 
