@@ -2,7 +2,7 @@
 <blockquote>
 <p>
 <h2>Measure and investigate heap memory allocation of Apache Maven</h2>
-<img src="https://travis-ci.com/quick-perf/maven-test-bench.svg?branch=master"></img>
+<a href="https://travis-ci.com/github/quick-perf/maven-test-bench"><img src="https://travis-ci.com/quick-perf/maven-test-bench.svg?branch=master"></img></a>
 </p>
 </blockquote>
 </div>
