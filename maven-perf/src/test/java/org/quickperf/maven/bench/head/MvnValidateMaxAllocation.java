@@ -70,11 +70,24 @@ public class MvnValidateMaxAllocation {
 		// THEN
 		if(testHasFailed(printableResult)) {
 			String junit4ErrorReport = printableResult.toString();
-			throw new AssertionError("Allocation greater than expected. "
-					                + System.lineSeparator()
-					                + junit4ErrorReport);
+			String errorMessage = buildErrorMessage(junit4ErrorReport);
+			throw new AssertionError(errorMessage
+					+ System.lineSeparator()
+					+ junit4ErrorReport);
+
 		}
 
+	}
+
+	private String buildErrorMessage(String junit4ErrorReport) {
+		if(isAllocationIssue(junit4ErrorReport)) {
+			return "Allocation greater than expected.";
+		}
+		return  "Unexpected failure.";
+	}
+
+	private boolean isAllocationIssue(String junit4ErrorReport) {
+		return junit4ErrorReport.contains("Expected heap allocation");
 	}
 
 	private boolean testHasFailed(PrintableResult printableResult) {
