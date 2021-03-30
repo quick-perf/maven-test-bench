@@ -20,12 +20,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <modules>
-        <module>bench-tools</module>
-        <module>bench-tools-maven</module>
-        <module>maven-perf</module>
-    </modules>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -64,4 +58,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>bench-tools</module>
+                <module>bench-tools-maven</module>
+                <module>maven-perf</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>ci</id>
+            <modules>
+                <module>bench-tools</module>
+                <module>bench-tools-maven</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
