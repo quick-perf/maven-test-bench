@@ -1,10 +1,6 @@
-name: CI
+name: Daily Memory Check
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
   schedule:
     - cron: '0 6 * * *'
 
