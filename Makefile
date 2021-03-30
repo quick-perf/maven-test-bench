@@ -11,6 +11,9 @@ clean: 						## Cleanup project files (basically run `mvn clean`)
 build: 						## Build project with running all tests (basically run `mvn package`)
 	mvn package -B
 
+ci:
+	mvn package -B -P ci
+
 install-only-bench-tools: 	## Install locally all tools lib necessary to run maven perf tests.
 	mvn install -pl bench-tools-maven -am -B
 
