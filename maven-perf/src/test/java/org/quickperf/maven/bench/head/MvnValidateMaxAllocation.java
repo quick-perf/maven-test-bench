@@ -36,7 +36,7 @@ public class MvnValidateMaxAllocation {
 
 		private final List<String> validate = Collections.singletonList("validate");
 
-		//@Before
+		@Before
 		public void before() throws VerificationException {
 			new InstallMavenVersionIfNotExists(CURRENT_MAVEN_HEAD).execute();
 			System.setProperty("verifier.forkMode", "auto"); // embedded
