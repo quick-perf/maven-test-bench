@@ -35,6 +35,7 @@ public enum Maven3Version {
     ,V_3_6_1("3.6.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
     ,V_3_6_2("3.6.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
     ,V_3_6_3("3.6.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
+    ,V_3_8_1("3.8.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
     ,HEAD("master", UrlPatterns.HTTP_GIT_REPO)
     ;
 
