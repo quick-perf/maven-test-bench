@@ -24,4 +24,4 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Bench allocation of Maven Releases
-        run: mvn maven-perf -Dtest=MvnValidateAllocationByMaven3VersionTest test
+        run: mvn test maven-perf -Dtest=MvnValidateAllocationByMaven3VersionTest test
