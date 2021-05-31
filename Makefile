@@ -15,7 +15,7 @@ ci:
 	mvn package -B -P ci
 
 install-only-bench-tools: 	## Install locally all tools lib necessary to run maven perf tests.
-	mvn install -pl bench-tools-maven -am -B
+	mvn install -DskipTests -pl bench-tools-maven -am -B
 
 runValidateMaxAllocation: install-only-bench-tools	## Running only memory allocation needed for last commit from Maven GIT Repository on master branch
 	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B

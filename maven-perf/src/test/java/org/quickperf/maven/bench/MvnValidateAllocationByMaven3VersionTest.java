@@ -128,9 +128,19 @@ public class MvnValidateAllocationByMaven3VersionTest {
                                                                , allocations
                                                                , resultFilePath);
         }
-
+        
+        
+        
+        String csvContent = readCsvContentFrom(resultFilePath);
+        logger.info("Bench result" + System.lineSeparator() + csvContent);
+        
         ExecutionContextTextExporter.INSTANCE.writeExecutionContextToTextFile(dateTimeAsString);
         logger.debug("measure - end");
+    }
+
+    private String readCsvContentFrom(String resultFilePath) throws IOException {
+        Path path = Paths.get(resultFilePath);
+        return Files.readString(path);
     }
 
     private void saveMavenVersion(Maven3Version maven3Version) {
