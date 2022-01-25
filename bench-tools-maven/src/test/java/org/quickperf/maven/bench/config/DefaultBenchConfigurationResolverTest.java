@@ -21,6 +21,7 @@ public class DefaultBenchConfigurationResolverTest {
     private static final String ENV_TEST_KEY = "PATH";
 
     private static final String MAVEN_VERSION_FROM = "maven.version.from";
+    private static final String SYSTEM_PROPERTIES_KEY = "hello.world";
 
     private final DefaultBenchConfigurationResolver resolver = new DefaultBenchConfigurationResolver();
 
@@ -33,5 +34,16 @@ public class DefaultBenchConfigurationResolverTest {
     public void getPropertyShouldReadFromOsEnv() {
         Assert.assertNotNull(resolver.resolve(ENV_TEST_KEY));
     }
+
+    @Test
+    public void getPropertyShouldReadFromSystemProperties() {
+        final String expectedValue = "Foo Bar";
+        System.setProperty(SYSTEM_PROPERTIES_KEY, expectedValue);
+
+        final String resolve = resolver.resolve(SYSTEM_PROPERTIES_KEY);
+
+        assertEquals(expectedValue, resolve);
+    }
+
 
 }
