@@ -14,39 +14,46 @@ package org.quickperf.maven.bench.projects;
 import org.quickperf.maven.bench.config.BenchConfiguration;
 
 import java.io.File;
+import java.util.Arrays;
 
 public enum Maven3Version {
-     V_3_0_4("3.0.4", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_0_5("3.0.5", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_1_0("3.1.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_1_1("3.1.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_2_1("3.2.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_2_2("3.2.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_2_3("3.2.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_2_5("3.2.5", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_3_1("3.3.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_3_3("3.3.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_3_9("3.3.9", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_5_0("3.5.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_5_2("3.5.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_5_3("3.5.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_5_4("3.5.4", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_6_0("3.6.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_6_1("3.6.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_6_2("3.6.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_6_3("3.6.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,V_3_8_1("3.8.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD)
-    ,HEAD("master", UrlPatterns.HTTP_GIT_REPO)
-    ;
+    V_3_0_4("3.0.4", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_0_5("3.0.5", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_1_0("3.1.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_1_1("3.1.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_2_1("3.2.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_2_2("3.2.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_2_3("3.2.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_2_5("3.2.5", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_3_1("3.3.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_3_3("3.3.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_3_9("3.3.9", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_5_0("3.5.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_5_2("3.5.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_5_3("3.5.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_5_4("3.5.4", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_6_0("3.6.0", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_6_1("3.6.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_6_2("3.6.2", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_6_3("3.6.3", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    V_3_8_1("3.8.1", UrlPatterns.HTTP_RELEASE_DOWNLOAD),
+    BRANCH_V_3_8("origin/maven-3.8.x", UrlPatterns.HTTP_GIT_REPO, "3.8.x"),
+    HEAD("master", UrlPatterns.HTTP_GIT_REPO, "head");
 
     private final String numVersion;
     private final String urlAsString;
+    private final String version;
     private final InstallProcess installProcess;
 
-    Maven3Version(String numVersion, String urlPattern) {
+    Maven3Version(String numVersion, String urlPattern, String configVersion) {
         this.numVersion = numVersion;
+        this.version = configVersion;
         this.urlAsString = String.format(urlPattern, numVersion, numVersion);
         this.installProcess = InstallProcess.parse(urlPattern);
+    }
+
+    Maven3Version(String numVersion, String urlPattern) {
+        this(numVersion, urlPattern, numVersion);
     }
 
     public String getMavenPath() {
@@ -71,6 +78,13 @@ public enum Maven3Version {
         return "Maven" + " " + numVersion;
     }
 
+    public static Maven3Version parse(String version) {
+        return Arrays.stream(Maven3Version.values())
+                .filter(maven3Version -> maven3Version.version.equalsIgnoreCase(version))
+                .findFirst()
+                .orElse(Maven3Version.HEAD);
+    }
+
     public enum InstallProcess {
         GIT,
         HTTP;
@@ -89,7 +103,7 @@ public enum Maven3Version {
             return installProcess;
         }
     }
-    
+
     private static class UrlPatterns {
         private static final String HTTP_RELEASE_DOWNLOAD = "https://archive.apache.org/dist/maven/maven-3/%s/binaries/apache-maven-%s-bin.zip";
         private static final String HTTP_GIT_REPO = "https://gitbox.apache.org/repos/asf/maven.git";

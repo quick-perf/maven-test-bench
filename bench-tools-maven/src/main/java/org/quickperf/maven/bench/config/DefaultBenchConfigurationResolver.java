@@ -10,6 +10,7 @@ import java.util.Objects;
  *
  * <ol>
  *    <li>from Environment Variable</li>
+ *    <li>from System properties</li>
  *    <li>from a local configuration file named <pre>local-maven-bench.properties</pre></li>
  *    <li>from the default configuration file named <pre>maven-bench.properties</pre></li>
  * </ol>
@@ -27,6 +28,7 @@ class DefaultBenchConfigurationResolver implements BenchConfigurationResolver {
                     .replace('-', '_');
             return System.getenv(name);
         });
+        resolvers.add(System::getProperty);
         addBenchPropertiesFromFile(resolvers, "local." + CONFIG_FILENAME);
         addBenchPropertiesFromFile(resolvers, CONFIG_FILENAME);
     }

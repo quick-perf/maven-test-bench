@@ -1,4 +1,4 @@
-package org.quickperf.maven.bench.head;
+package org.quickperf.maven.bench;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -11,8 +11,8 @@ import org.quickperf.jvm.allocation.AllocationUnit;
 import org.quickperf.jvm.annotations.ExpectMaxHeapAllocation;
 import org.quickperf.jvm.annotations.HeapSize;
 import org.quickperf.jvm.annotations.MeasureHeapAllocation;
-import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.commands.InstallMavenVersionIfNotExists;
+import org.quickperf.maven.bench.config.BenchConfiguration;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 import org.quickperf.writer.WriterFactory;
@@ -31,16 +31,15 @@ public class MvnValidateMaxAllocation {
 		private final TestingProject apacheCamelProject = BenchConfiguration.INSTANCE.getTestingProject();
 
 		private Verifier verifier;
-
-		private static final Maven3Version CURRENT_MAVEN_HEAD = Maven3Version.valueOf("HEAD");
-
 		private final List<String> validate = Collections.singletonList("validate");
 
 		@Before
 		public void before() throws VerificationException {
-			new InstallMavenVersionIfNotExists(CURRENT_MAVEN_HEAD).execute();
+			final var mavenVersion = BenchConfiguration.INSTANCE.getMavenGitVersion();
+			final Maven3Version version = Maven3Version.parse(mavenVersion);
+			new InstallMavenVersionIfNotExists(version).execute();
 			System.setProperty("verifier.forkMode", "auto"); // embedded
-			System.setProperty("maven.home", CURRENT_MAVEN_HEAD.getMavenPath());
+			System.setProperty("maven.home", version.getMavenPath());
 			if (apacheCamelProject.isNotAlreadyInstalled()) {
 				try {
 					apacheCamelProject.installProject();

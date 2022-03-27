@@ -37,8 +37,8 @@ The other properties are only used by `MvnValidateAllocationByMaven3VersionTest`
  
 The measures shown here are done against the Apache Camel project because it contains more than 800 Maven modules: such a huge build is perfect to get significant measures. But you can choose your own target.
 
-_Note: currently, every day, a job @TravisCI run `org.quickperf.maven.bench.head.MvnValidateMaxAllocation` in order to watch over Apache Maven project and observe 
-if new features on Apache Maven needs more memory then yesterday._  
+_Note: currently, every day, a job @TravisCI run `org.quickperf.maven.bench.MvnValidateMaxAllocation` in order to watch
+over Apache Maven project and observe if new features on Apache Maven needs more memory then yesterday._  
 
 
 For reproducibility of our measures, a precisely defined commit of this project was chosen:

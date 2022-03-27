@@ -14,7 +14,9 @@ package org.quickperf.maven.bench.config;
 import org.quickperf.maven.bench.projects.Maven3Version;
 import org.quickperf.maven.bench.projects.TestingProject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Benchmark configuration needed to run all bench tests on Apache Maven.
@@ -44,8 +46,10 @@ public class BenchConfiguration {
 
     private List<Maven3Version> maven3VersionsToMeasure;
 
+    private String mavenGitVersion;
+
     private void initialize() {
-        BenchConfigurationResolver properties  = new DefaultBenchConfigurationResolver();
+        BenchConfigurationResolver properties = new DefaultBenchConfigurationResolver();
         String numberOfMeasuresByMavenVersionAsString = properties.resolve("measures.number-by-maven-version");
         this.numberOfMeasuresByMavenVersion = Integer.parseInt(numberOfMeasuresByMavenVersionAsString);
         String numberOfWarnsAsString = properties.resolve("warmup.number");
@@ -53,7 +57,7 @@ public class BenchConfiguration {
         this.mavenBinariesPath = properties.resolve("maven.binaries.path");
         this.exportPathOfMeasures = properties.resolve("measures.export.path");
         this.maven3VersionsToMeasure = findMaven3VersionsToMeasure(properties);
-
+        this.mavenGitVersion = properties.resolve("maven.git.version");
         this.testingProject = new TestingProject(
                 properties.resolve("testing.project.name"),
                 properties.resolve("testing.project.repository"),
@@ -119,5 +123,9 @@ public class BenchConfiguration {
 
     public List<Maven3Version> getMaven3VersionsToMeasure() {
         return maven3VersionsToMeasure;
+    }
+
+    public String getMavenGitVersion() {
+        return mavenGitVersion;
     }
 }
