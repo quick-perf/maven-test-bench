@@ -18,7 +18,7 @@ install-only-bench-tools: 	## Install locally all tools lib necessary to run mav
 	mvn install -DskipTests -pl bench-tools-maven -am -B
 
 runValidateMaxAllocation: install-only-bench-tools	## Running only memory allocation needed for last commit from Maven GIT Repository on master branch
-	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.head.MvnValidateMaxAllocation -B
+	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.MvnValidateMaxAllocation -B
 
 runMeasures: install-only-bench-tools	## Running only measures
 	mvn test -pl maven-perf -Dtest=org.quickperf.maven.bench.MvnValidateAllocationByMaven3VersionTest -B

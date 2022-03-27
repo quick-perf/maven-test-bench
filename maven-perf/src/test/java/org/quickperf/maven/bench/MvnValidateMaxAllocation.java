@@ -1,4 +1,4 @@
-package org.quickperf.maven.bench.head;
+package org.quickperf.maven.bench;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -36,7 +36,7 @@ public class MvnValidateMaxAllocation {
 		@Before
 		public void before() throws VerificationException {
 			final var mavenVersion = BenchConfiguration.INSTANCE.getMavenGitVersion();
-			final Maven3Version version = Maven3Version.valueOf(mavenVersion);
+			final Maven3Version version = Maven3Version.parse(mavenVersion);
 			new InstallMavenVersionIfNotExists(version).execute();
 			System.setProperty("verifier.forkMode", "auto"); // embedded
 			System.setProperty("maven.home", version.getMavenPath());
